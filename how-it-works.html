@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="how-it-works.html" class="active">How It Works</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">How It Works — In Plain English</h1>
+  <p class="sub">No technical background needed. This page explains what we're building, walks one deal through the system start to finish, and shows what your day looks like.</p>
+
+  <h2>The Big Idea (30 seconds)</h2>
+  <div class="card">
+    <p>Imagine a TC office with <strong>eight employees</strong>. Each one has exactly one job — one reads contracts, one watches deadlines, one sends emails, and so on. In the middle of the office is a <strong>giant whiteboard</strong> where every deal is written down: address, price, dates, what's done, what's next.</p>
+    <p>The employees never talk to each other. They just read the whiteboard, do their one job, and write the result back on the whiteboard. When the board says a step is finished, the next employee sees it and starts theirs.</p>
+    <p>In our system, the "employees" are small computer programs (we call them <strong>workers</strong>), and the whiteboard is a shared online database (a smart spreadsheet called <strong>Airtable</strong>). One special worker — the <strong>Manager</strong> — checks work against a written rulebook, exactly like a supervisor with a checklist. Anything the rulebook doesn't cover, or anything sensitive, goes to a real person. The system does the busywork; <strong>people make the judgment calls</strong>.</p>
+  </div>
+
+  <h2>One Deal, Start to Finish: 123 Maple Street</h2>
+  <div class="card">
+    <h3>Day 1 — The contract arrives</h3>
+    <ul>
+      <li>The agent emails the signed contract to the system's inbox — that's all they have to do.</li>
+      <li>The <strong>Reader worker</strong> opens it and copies everything onto the whiteboard: buyer, seller, $329,000 price, $3,000 earnest money, closing date, inspection deadline — every blank on the contract.</li>
+      <li><strong>STOP — a person checks first.</strong> Before anything else happens, a human compares what the Reader wrote down against the actual contract. Why? If a date is copied wrong, every reminder after it is wrong too. The person clicks <em>Verified</em> — that click unlocks everything else.</li>
+      <li>The moment it's verified: the deadline calendar is built, "we've opened your file" emails go out to everyone, the SkySlope file is created, and the document checklist appears (all 50+ items this deal will need).</li>
+    </ul>
+
+    <h3>Days 3–5 — Money and lender</h3>
+    <ul>
+      <li>The <strong>Calendar worker</strong> sees the earnest-money deadline coming and tells the <strong>Email worker</strong>: "chase the receipt."</li>
+      <li>The Email worker sends a friendly, branded reminder (from a pre-approved template — it never writes its own emails) and logs a copy.</li>
+      <li>The receipt comes back, the <strong>Filing worker</strong> recognizes it, checks it off the list, and files it in SkySlope. The whiteboard now shows: earnest money ✓.</li>
+    </ul>
+
+    <h3>Days 6–14 — Inspection and repairs</h3>
+    <ul>
+      <li>The buyer's inspection finds a leaky water heater. The buyer wants it fixed.</li>
+      <li>The <strong>Repairs worker</strong> drafts the repair request onto the official Tennessee form (RF654) — <strong>but it cannot send it.</strong></li>
+      <li>The request goes to the <strong>Manager</strong>, who checks the rulebook. The agent's written rule says: "repairs under $2,500 that appear in the inspection report — approve." The water heater qualifies. Approved, stamped "approved by rule 4," and sent to the other agent.</li>
+      <li>If the buyer had instead demanded a new roof — no rule covers that — the Manager <strong>stops and texts the human</strong>: <em>"123 Maple St: repair request needs your review. Tap here."</em> Nothing moves until a person decides.</li>
+      <li>Meanwhile the client automatically gets a friendly update email with everything happening on their deal — plus the local utility phone numbers for their move.</li>
+    </ul>
+
+    <h3>Days 15–25 — Getting ready to close</h3>
+    <ul>
+      <li>The Calendar worker notices the lender has gone quiet → the Email worker checks in about the appraisal.</li>
+      <li>The client picks a closing time; the <strong>Closing worker</strong> books it with the title company (or closing attorney — the system knows which one this county uses).</li>
+      <li>The settlement statement arrives. The Manager checks the math against the contract; a person gives the final sign-off before the client ever sees a number.</li>
+      <li><strong>Wire instructions are NEVER handled by the system.</strong> A person verifies them by phone, every time, no exceptions. This is the #1 fraud risk in real estate and it stays human forever.</li>
+    </ul>
+
+    <h3>Days 26–30 — Closing and after</h3>
+    <ul>
+      <li>Final signed documents are requested from title, uploaded to SkySlope, and the checklist is confirmed 100% complete for the broker.</li>
+      <li>The client gets a congratulations email with a review/referral ask. The CRM is updated. The file is archived so it can be produced within 24 hours for 3 years — exactly what Tennessee requires.</li>
+    </ul>
+  </div>
+
+  <h2>What Your Day Looks Like (the human's job)</h2>
+  <div class="card">
+    <p>You do <strong>not</strong> watch the system all day. The system comes to you:</p>
+    <table>
+      <tr><th>When</th><th>What you see</th><th>What you do</th></tr>
+      <tr><td>New contract arrives</td><td>A "verify this contract data" item with the contract and the copied data side by side</td><td>Compare, fix anything wrong, click Verified (2–3 minutes)</td></tr>
+      <tr><td>Something needs judgment</td><td>A <strong>text message</strong>: which deal, what's stuck, a link</td><td>Tap the link, read the situation, click Approve or Reject with a note</td></tr>
+      <tr><td>No response after a few hours</td><td>A reminder text; if a deadline gets close, the deal freezes itself and texts you urgently</td><td>A stuck deal can never quietly miss a deadline</td></tr>
+      <tr><td>Weekly</td><td>A digest email: every deal's status, plus a few random auto-approvals to double-check</td><td>Skim it; if a rule is behaving badly, fix the rulebook</td></tr>
+      <tr><td>Wire instructions</td><td>A task that only a person can complete</td><td>Call the known number, verify verbally, mark done</td></tr>
+    </table>
+    <p>Over time your job shifts from <em>clicking approvals</em> to <em>writing the rules</em> — every time you handle something the rulebook didn't cover, that decision can become a new rule so the Manager handles it next time.</p>
+  </div>
+
+  <h2>How Approving This Blueprint Works (no GitHub experience needed)</h2>
+  <div class="card">
+    <p>This website's pages live in a shared online folder (GitHub). When we want to change the design, you get a link showing <strong>the exact change</strong> — old wording and new wording side by side, like tracked changes in Word.</p>
+    <div class="flow">
+      <span class="step">We propose a change</span><span class="arrow">→</span>
+      <span class="step">You get a link showing exactly what would change</span><span class="arrow">→</span>
+      <span class="step human">You comment or click Approve</span><span class="arrow">→</span>
+      <span class="step">The website updates itself</span>
+    </div>
+    <p>Nothing gets built into the real system until its page here is approved. If it's not on this site, it doesn't exist.</p>
+  </div>
+
+  <h2>Glossary — Every Term on This Site, One Line Each</h2>
+  <table>
+    <tr><th>Term</th><th>What it means</th></tr>
+    <tr><td><strong>Worker</strong></td><td>A small computer program with exactly one job (like one employee)</td></tr>
+    <tr><td><strong>n8n</strong></td><td>The software the workers are built in — think of it as the office building they work in</td></tr>
+    <tr><td><strong>Airtable</strong></td><td>The shared online whiteboard/spreadsheet where every deal's information lives</td></tr>
+    <tr><td><strong>Database / table</strong></td><td>An organized list — like a spreadsheet tab (one for deals, one for contacts, etc.)</td></tr>
+    <tr><td><strong>Status field</strong></td><td>A label on each deal saying where it is (e.g. "waiting for approval") — workers read it to know whose turn it is</td></tr>
+    <tr><td><strong>Gate</strong></td><td>A checkpoint a deal cannot pass until someone (or the rulebook) says OK</td></tr>
+    <tr><td><strong>Machine gate</strong></td><td>A checkpoint the system clears itself when a routine step finishes correctly</td></tr>
+    <tr><td><strong>Human gate</strong></td><td>A checkpoint only a person can clear</td></tr>
+    <tr><td><strong>Manager / Rulebook</strong></td><td>The supervisor worker that approves routine items using written rules a human authored — and asks a human about everything else</td></tr>
+    <tr><td><strong>Escalation</strong></td><td>"I don't know — asking a human." Arrives as a text message (via Twilio, the texting service)</td></tr>
+    <tr><td><strong>Audit log</strong></td><td>The permanent diary: every action, by whom, when, and why — nothing happens off the record</td></tr>
+    <tr><td><strong>Template / merge fields</strong></td><td>A pre-written, branded email where the blanks (name, address, date) fill in automatically</td></tr>
+    <tr><td><strong>Rolodex</strong></td><td>The contact directory: lenders, title companies, attorneys, inspectors, utilities — by county</td></tr>
+    <tr><td><strong>SkySlope</strong></td><td>The brokerage's compliance system — the final filing cabinet the broker audits</td></tr>
+    <tr><td><strong>RF forms</strong></td><td>Tennessee's official numbered real-estate forms (RF401 = the purchase contract, RF654 = repair request, etc.)</td></tr>
+    <tr><td><strong>API</strong></td><td>A doorway that lets two software systems talk to each other directly</td></tr>
+    <tr><td><strong>GitHub / pull request</strong></td><td>The shared folder this site lives in / a proposed change shown side-by-side for your approval</td></tr>
+    <tr><td><strong>CRM</strong></td><td>The customer list used for follow-ups, reviews, and referrals after closing</td></tr>
+  </table>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice</footer>
+</body>
+</html>
