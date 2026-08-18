@@ -53,7 +53,7 @@
     <div class="card">
       <span class="status draft">Draft — for review</span>
       <h3>Worker Architecture</h3>
-      <p>Seven specialized workers, each single-purpose and independently testable. Machine gates vs. human approval gates, the handoff protocol, and why no worker ever talks directly to another.</p>
+      <p>Eight specialized workers, each single-purpose and independently testable. Machine gates vs. human gates, the Manager worker that applies the human-authored rulebook, the Twilio SMS escalation ladder, and why no worker ever talks directly to another.</p>
       <a class="go" href="workers.html">Review section</a>
     </div>
     <div class="card">
@@ -81,7 +81,7 @@
     <ul>
       <li><strong>Many small workers, one shared database.</strong> Specialized bots are easier to diagnose and fix; the Airtable base is the only way they communicate.</li>
       <li><strong>Event-driven, not calendar-driven.</strong> TN deadlines move (RF654 delivery restarts the clock); phases are entered by events, with the original day buckets kept as the human mental model.</li>
-      <li><strong>No worker moves without a gate.</strong> Machine gates (status fields) govern routine handoffs; human approval gates govern every judgment, money-adjacent, or outbound-to-other-side action.</li>
+      <li><strong>No worker moves without a gate.</strong> Machine gates (status fields) govern routine handoffs; judgment, money-adjacent, and outbound-to-other-side actions are vetted by the Manager worker's human-authored rulebook — rule misses escalate to the human by Twilio SMS. Wire verification and rulebook sign-off stay human forever.</li>
       <li><strong>Rules as data, not guesswork.</strong> Rolodexes, TAR form catalog, deadline rules, SOPs per worker, and templates all live in the database — workers retrieve, never improvise.</li>
       <li><strong>Everything audited.</strong> Every action, gate pass, and email logs to an append-only audit trail — satisfies TN REC 3-year retention / 24-hour retrieval and makes failure diagnosis fast.</li>
       <li><strong>Branded, consistent output.</strong> All outbound communication uses approved templates with the brand kit: logo, color palette, disclaimers.</li>

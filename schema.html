@@ -37,6 +37,7 @@
     <a href="#comms">8 · Comms Log</a>
     <a href="#audit">9 · Audit Log</a>
     <a href="#templates">10 · Templates</a>
+    <a href="#rulebook">11 · Rulebook</a>
     <a href="#access">Worker Access Map</a>
     <a href="#build">Build Order</a>
   </div>
@@ -198,6 +199,18 @@
     <tr><td>Version / Active?</td><td>Number / Checkbox</td><td>Old versions retained for the audit trail</td></tr>
   </table>
 
+  <h2 id="rulebook">Table 11 · Rulebook — the Manager worker's decision criteria</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Rule ID</td><td>Autonumber</td><td>Cited in every auto-approval audit stamp ("Policy vN, rule X")</td></tr>
+    <tr><td>Gate Type</td><td>Single select</td><td>Matches Approval Queue gate types</td></tr>
+    <tr><td>Condition</td><td>Long text (structured)</td><td>Exact-match criteria, e.g. "repair proposal ≤ $2,500 AND all items in inspection report"</td></tr>
+    <tr><td>Action</td><td>Single select</td><td>Approve / Reject / Escalate</td></tr>
+    <tr><td>Authorized By</td><td>Text</td><td>The licensed agent/human whose written pre-authorization the rule traces to</td></tr>
+    <tr><td>Version / Active?</td><td>Number / Checkbox</td><td>New versions require human sign-off; old versions retained for audit</td></tr>
+  </table>
+  <div class="callout risk">The Manager applies rules by exact match only — no match means escalate (Twilio SMS to the human). Wire-adjacent gates and rulebook sign-off are never delegated to a rule.</div>
+
   <h2 id="access">Worker ↔ Table Access Map (least privilege)</h2>
   <table>
     <tr><th>Worker</th><th>Writes</th><th>Reads</th></tr>
@@ -208,6 +221,7 @@
     <tr><td>5 · Repairs / Amendments</td><td>Approval Queue, Deals (Inspection Status)</td><td>Documents, Deals</td></tr>
     <tr><td>6 · Title / Closing</td><td>Deals (Title &amp; Closing Status), Approval Queue</td><td>Contacts, Deals</td></tr>
     <tr><td>7 · Post-Close</td><td>Deals (Phase → Archived), Comms Log, CRM push</td><td>Deals, Templates</td></tr>
+    <tr><td>8 · Manager (Rulebook)</td><td>Approval Queue decisions, Deals gate statuses (on approve)</td><td>Rulebook, Approval Queue, Deals, Documents</td></tr>
     <tr><td><em>All workers</em></td><td>Audit Log (append only)</td><td>—</td></tr>
   </table>
 

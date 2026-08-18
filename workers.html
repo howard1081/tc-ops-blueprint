@@ -23,7 +23,7 @@
 
 <main>
   <h1 class="page">Worker Architecture</h1>
-  <p class="sub">Seven specialized workers (n8n workflows), each single-purpose. They never talk to each other — every handoff happens through status fields in the shared database.</p>
+  <p class="sub">Eight specialized workers (n8n workflows), each single-purpose. They never talk to each other — every handoff happens through status fields in the shared database.</p>
 
   <div class="callout ok">
     <strong>Design rationale:</strong> many small workers are easier to diagnose than one big bot — when something breaks, the deal record and audit log show exactly which worker failed, at which gate, on which deal. But bot count alone doesn't create diagnosability; the shared database + append-only audit log do.
@@ -39,6 +39,7 @@
     <tr><td>5</td><td><strong>Repairs / Amendments Router</strong></td><td>Drafts repair proposals and amendments, stages them for agent approval, routes executed versions, logs delivery events that re-anchor deadlines</td><td>Inspection report received; amendment requested</td><td>Staging to the Approval Queue; only sends after approval</td></tr>
     <tr><td>6</td><td><strong>Title / Closing Coordinator</strong></td><td>Title/attorney check-ins, closing scheduling, ALTA/settlement staging for human review, closing-week logistics</td><td>Phase → Closing Prep; title documents arrive</td><td>Updating Title/Closing status; staging ALTA review</td></tr>
     <tr><td>7</td><td><strong>Post-Close</strong></td><td>Final SkySlope upload verification, review/referral email, CRM update, retention archive</td><td>Closing confirmed (recorded/funded)</td><td>Setting Phase → Archived</td></tr>
+    <tr><td>8</td><td><strong>Manager (Rulebook)</strong></td><td>Sits on the Approval Queue and applies the versioned, human-authored decision rulebook: exact rule match → auto-approve (stamped "approved by Policy vN, rule X"); no match → escalate to the human via Twilio SMS. Never interprets or guesses.</td><td>Any item lands in the Approval Queue</td><td>Approving (flips the deal's status) or escalating (SMS + queue stays pending)</td></tr>
   </table>
 
   <h2>The Handoff Protocol</h2>
@@ -60,19 +61,45 @@
     <tr><td><span class="pill human">HUMAN</span></td><td>Judgment, money, and anything crossing to the other side</td><td>Worker stages the action in the Approval Queue with exactly what will happen; a person approves/rejects; approval flips the status</td></tr>
   </table>
 
-  <h3>The Human Gate List (proposed — review this)</h3>
+  <h3>The Gate List and Who Vets It (safest-approach configuration)</h3>
+  <p>Gates are vetted by the <strong>Manager worker</strong> only where a written rule covers the scenario exactly; the human vets rule misses and everything marked human. Sensitive gates start human and are handed to the Manager only after a proven track record.</p>
   <table>
-    <tr><th>Gate</th><th>Why it's human</th></tr>
-    <tr><td>Contract data verification after intake</td><td>A bad extracted date poisons every downstream deadline — non-negotiable</td></tr>
-    <tr><td>Repair proposal release to co-op side</td><td>The "approval click" — negotiation-adjacent, crosses to the other side</td></tr>
-    <tr><td>Amendments &amp; extensions (price, credits, dates)</td><td>Contract terms change — agent decision by law and by sense</td></tr>
-    <tr><td>ALTA / settlement statement sign-off</td><td>Money reconciliation — commissions, prorations, credits</td></tr>
-    <tr><td>Wire-adjacent anything</td><td>Wire fraud is the #1 loss vector; verbal verification only, never automated</td></tr>
-    <tr><td>Unclassifiable / suspicious inbound documents</td><td>Better a 10-minute human review than a misfiled contract document</td></tr>
+    <tr><th>Gate</th><th>Vetter</th><th>Notes</th></tr>
+    <tr><td>Contract data verification after intake</td><td><span class="pill human">HUMAN</span> at first → Manager once extraction accuracy is proven over real deals</td><td>A bad extracted date poisons every downstream deadline</td></tr>
+    <tr><td>Repair proposal release to co-op side</td><td><span class="pill human">HUMAN</span> at first → Manager within agent pre-authorized bands</td><td>Outside the band → always escalate; authorization must trace to the licensed agent</td></tr>
+    <tr><td>Amendments &amp; extensions (price, credits, dates)</td><td><span class="pill human">HUMAN</span>; Manager only for narrow agent pre-authorized categories</td><td>Contract-term changes are the licensed agent's call by law</td></tr>
+    <tr><td>ALTA / settlement statement sign-off</td><td><span class="pill human">HUMAN</span> with Manager pre-checks (numeric reconciliation) flagging mismatches</td><td>Money reconciliation — commissions, prorations, credits</td></tr>
+    <tr><td>Wire-adjacent anything</td><td><span class="pill human">HUMAN, forever</span></td><td>Verbal verification only — the email channel cannot be trusted, so no bot can do this</td></tr>
+    <tr><td>Unclassifiable / suspicious inbound documents</td><td><span class="pill human">HUMAN</span></td><td>Better a 10-minute review than a misfiled contract document</td></tr>
+    <tr><td>New rulebook versions</td><td><span class="pill human">HUMAN, forever</span></td><td>The human's enduring job: maintain the rulebook, not click approvals</td></tr>
   </table>
 
+  <h2>The Manager Worker &amp; Rulebook (path to full automation)</h2>
+  <div class="card">
+    <p>The human approver evolves into a <strong>rulebook author</strong>: they write down how they handle every scenario and what they vet; the Manager worker applies those criteria mechanically.</p>
+    <ul>
+      <li><strong>Rulebook as data:</strong> a versioned table of rules (condition → action → authority). Example: <em>"repair proposal ≤ $2,500 AND every item appears in the inspection report → approve."</em></li>
+      <li><strong>Exact match or escalate:</strong> the Manager never interprets. If a scenario doesn't match a rule exactly, it escalates — a manager that "reads intent" recreates the single-mega-bot problem.</li>
+      <li><strong>Audit stamp:</strong> every auto-approval logs "approved by Policy vN, rule X" — a stronger audit trail than a human click.</li>
+      <li><strong>Learning loop (the safe ramp):</strong> the first deals run fully human-approved with every decision + reason logged; those decisions are distilled into rules; escalation rate falls with each deal (expect 30–50% escalations early; 80–90% auto-handled after ~30–50 deals).</li>
+      <li><strong>Spot-check sampling:</strong> the weekly digest includes a random sample of auto-approvals for human review — a wrong rule fails silently and repeatedly, so sampling is the safety net.</li>
+    </ul>
+  </div>
+
+  <h2>Twilio SMS Escalation Ladder</h2>
+  <div class="card">
+    <p>When the Manager hits a rule miss (or any worker errors), the human is notified by text — SMS is the "pipeline is blocked" channel; email is for routine digests. n8n has a native Twilio node.</p>
+    <div class="flow">
+      <span class="step">Rule miss / error</span><span class="arrow">→</span>
+      <span class="step">Twilio SMS: deal + gate + Approval Queue link</span><span class="arrow">→</span>
+      <span class="step">No response in N hours: re-ping</span><span class="arrow">→</span>
+      <span class="step human">Deadline horizon reached: deal auto-set On Hold + urgent SMS</span>
+    </div>
+    <p>An unanswered text can never silently let a deadline blow — the ladder ends in a hard stop, not a hope.</p>
+  </div>
+
   <div class="callout risk">
-    <strong>Deliberate trade-off:</strong> not every handoff is human-gated — with 30 active deals, a human gate on every step makes the approver the bottleneck and re-creates the manual process. Human gates are reserved for the six categories above; everything else is machine-gated with full audit logging.
+    <strong>Deliberate trade-off:</strong> not every handoff is human-gated — with 30 active deals, a human gate on every step makes the approver the bottleneck and re-creates the manual process. Human involvement is reserved for the gates above, rule misses, and rulebook maintenance; everything else is machine-gated or Manager-vetted with full audit logging.
   </div>
 
   <h2>Worker Resources (rules, not guesswork)</h2>
@@ -84,7 +111,8 @@
       <li><strong>TAR form catalog</strong> — RF-number vocabulary for classification and deadline events.</li>
       <li><strong>TN deadline rules</strong> — business-day roll-forward, federal holiday table, the RF654 event-driven resolution clock.</li>
       <li><strong>Templates library</strong> — every outbound email from an approved, branded template (logo, palette, disclaimer).</li>
-      <li><strong>Escalation matrix</strong> — one human queue (the Approval Queue), not per-worker escalation paths.</li>
+      <li><strong>Rulebook</strong> — the versioned decision table the Manager worker applies; authored and signed off by the human.</li>
+      <li><strong>Escalation matrix</strong> — one human queue (the Approval Queue) + the Twilio SMS ladder, not per-worker escalation paths.</li>
     </ul>
   </div>
 
