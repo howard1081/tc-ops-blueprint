@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Model — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="process.html" class="active">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Process Model</h1>
+  <p class="sub">The contract-to-close workflow, from the original brainstorm (day buckets) converted to event-driven phases. Day ranges are shown as the typical timeline; phase transitions are triggered by events, not day counts.</p>
+
+  <div class="callout">
+    <strong>Why events, not days:</strong> Tennessee deadlines are event-driven — delivery of a Repair Proposal (RF654) ends the inspection period early and starts the resolution period; a 21-day cash closing and a 45-day financed closing pass through the same phases at different speeds. Day buckets remain the human mental model; the system tracks each deal's actual contract dates.
+  </div>
+
+  <h2>Phase Overview</h2>
+  <table>
+    <tr><th>Phase</th><th>Typical days</th><th>Entered when…</th><th>Exits when…</th></tr>
+    <tr><td><span class="pill phase">1 · Intake</span></td><td>Day 1–2</td><td>Executed contract received</td><td>Contract data human-verified &amp; released</td></tr>
+    <tr><td><span class="pill phase">2 · Contingencies</span></td><td>Day 3–14</td><td>Intake released</td><td>Inspection resolved + financing on track</td></tr>
+    <tr><td><span class="pill phase">3 · Closing Prep</span></td><td>Day 15–25</td><td>Contingencies resolved</td><td>Clear-to-close + closing booked + ALTA approved</td></tr>
+    <tr><td><span class="pill phase">4 · Closing</span></td><td>Day 26–30</td><td>Closing scheduled &amp; docs staged</td><td>Deed recorded / funds confirmed</td></tr>
+    <tr><td><span class="pill phase">5 · Post-Close</span></td><td>Close + 1–7</td><td>Closing confirmed</td><td>SkySlope file broker-approved &amp; archived, CRM updated</td></tr>
+  </table>
+
+  <h2>Phase 1 — Intake (Day 1)</h2>
+  <div class="card">
+    <ul>
+      <li>Executed contract arrives by email → parsed into the deal record (parties, price, earnest money, all contract dates, county, board addenda).</li>
+      <li>Cross-check against MLS data; discrepancies flagged.</li>
+      <li><span class="gate">HUMAN GATE:</span> extracted contract data must be verified by a person before anything downstream runs — a bad date here poisons every deadline after it.</li>
+      <li>On release: deal record created, document checklist instantiated (buyer/seller/cash/financed variant), deadline calendar computed, file-opened emails sent, SkySlope file created, storage folder created.</li>
+      <li>Rolodex linked: our agent, co-op agent, client(s), lender, title company or closing attorney (auto-suggested by county).</li>
+    </ul>
+  </div>
+
+  <h2>Phase 2 — Contingencies (Days 3–14)</h2>
+  <div class="card">
+    <h3>Days 3–5 — Money &amp; lender confirmation</h3>
+    <ul>
+      <li>Earnest money: chase receipt, send agent a copy, verify holder matches contract.</li>
+      <li>Lender follow-up: loan application confirmed complete; appraisal ordered.</li>
+      <li>Inspection scheduling confirmed; calendar reminder to agent (inspection branch is judgment-heavy — human-owned, system-reminded).</li>
+    </ul>
+    <h3>Days 6–14 — Inspection, repairs, appraisal, title</h3>
+    <ul>
+      <li>Client update email: status of everything + local utility contact info (auto-filled by county from the Utilities index).</li>
+      <li>Buyer repair requests → drafted onto Repair Proposal (RF654).</li>
+      <li><span class="gate">HUMAN GATE:</span> our agent approval click required before the proposal is sent to the co-op side. RF654 delivery is logged — it ends the inspection period and starts the resolution period clock.</li>
+      <li>Resolution tracking: executed Repair Amendment (RF655), written as-is acceptance (RF656), or extension — one must exist by the resolution deadline or the contract auto-terminates.</li>
+      <li>Lender: confirm okay to proceed with appraisal.</li>
+      <li><span class="gate">HUMAN GATE:</span> any extension or amendment request needs agent approval before routing.</li>
+      <li>Day-14 checkpoint: check in with title company / closing attorney (title commitment status).</li>
+    </ul>
+  </div>
+
+  <h2>Phase 3 — Closing Prep (Days 15–25)</h2>
+  <div class="card">
+    <ul>
+      <li>Lender monitoring: if lender is communicating, stay out of the way; if silent, check in — appraisal due date, underwriting status, clear-to-close.</li>
+      <li>Client summary email → propose closing time → book with title/attorney once client confirms.</li>
+      <li>Amendments in this window (price reduction, seller credit, closing date change RF657) route through the agent-approval gate.</li>
+      <li>Preliminary ALTA / settlement statement received → staged for review.</li>
+      <li><span class="gate">HUMAN GATE:</span> ALTA/settlement statement reviewed line-by-line (prorations, commissions, credits) and approved before the client sees it.</li>
+      <li>Buyer email: closing date/time/location, what to bring, final walkthrough reminder, buyer's ALTA, any final disclosure updates.</li>
+      <li><span class="gate">HUMAN GATE (hard, non-automatable):</span> wire instructions are never trusted from email — verbal verification only. The system reminds; a human verifies.</li>
+    </ul>
+  </div>
+
+  <h2>Phase 4 — Closing Day (Days 26–30)</h2>
+  <div class="card">
+    <ul>
+      <li>Request final signed documents from title/attorney.</li>
+      <li>Upload complete document set to SkySlope; verify every checklist item is satisfied.</li>
+      <li>Confirm recording / funding before the file is marked closed.</li>
+    </ul>
+  </div>
+
+  <h2>Phase 5 — Post-Close</h2>
+  <div class="card">
+    <ul>
+      <li>SkySlope final audit pass → broker approval.</li>
+      <li>Client email: congratulations, review request, referral ask (branded template).</li>
+      <li>CRM updated; deal archived to the indexed retention archive (TN REC: 3 years, retrievable within 24 hours).</li>
+    </ul>
+  </div>
+
+  <h2>Source: Original Brainstorm Notes</h2>
+  <div class="card">
+    <p>This model is built from the handwritten brainstorming session (5 pages, transcribed 2026-08-18). Key elements carried forward:</p>
+    <ul>
+      <li>Day buckets 1 / 3–5 / 6–14 / 15–25 / closing → the five phases above.</li>
+      <li>"Approval click" before repair proposals cross to the other side → formalized as human gates.</li>
+      <li>Rolodex of lenders (agent-updatable), utilities index by locale, spreadsheet as deal tracker → the database schema.</li>
+      <li>SkySlope as the compliance back end ("archaic solution") — filed to, not driven by.</li>
+      <li>Post-close reviews/referrals email + CRM update.</li>
+      <li>Templates carry a design element: logo, color palette, disclaimers.</li>
+    </ul>
+    <p><em>Open items from the notes still to resolve: storage provider (Dropbox vs. other), the "Jo" role assignments, and the detailed extension-request flow.</em></p>
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice</footer>
+</body>
+</html>

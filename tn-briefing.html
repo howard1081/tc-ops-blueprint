@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tennessee / TAR Rules — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html" class="active">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Tennessee / TAR Deep-Dive</h1>
+  <p class="sub">TC specifics for East Tennessee: the regulatory frame, the TAR form vocabulary, RF401 deadline mechanics, and the regional closing conventions the system must branch on.</p>
+
+  <h2>1 · The Regulatory Frame</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Regulator:</strong> Tennessee Real Estate Commission (TN REC, Dept. of Commerce &amp; Insurance) — licenses brokers/affiliate brokers and audits broker files for recordkeeping, disclosure, and trust-account compliance.</li>
+      <li><strong>Record retention (hard system requirement):</strong> T.C.A. § 62-13-312(b)(6) — all transaction records preserved <strong>3 years after consummation</strong>. Electronic records allowed (Rule 1260-02-.40) but must be <strong>retrievable in organized form within 24 hours</strong> of a Commission inspection request, with a written retention schedule. The archive workflow must produce an indexed per-file archive that passes the 24-hour retrieval test.</li>
+      <li><strong>Escrow:</strong> T.C.A. § 62-13-321 — broker escrow records (depositor, deposit date, withdrawal date, payee) kept 3 years. Earnest money handled per contract terms; broker responsible at all times.</li>
+      <li><strong>Licensing boundary:</strong> the operation is licensed, but automated comms should still avoid anything that reads as negotiation or advice — templates stay factual/status-only, and judgment calls route to the agent.</li>
+    </ul>
+  </div>
+
+  <h2>2 · The TAR Form System (the document vocabulary)</h2>
+  <p>Tennessee REALTORS® publishes the statewide residential form library; re-issued each January with occasional mid-year changes (e.g., the July 19, 2024 post-NAR-settlement compensation rewrite). The system keys on <strong>RF numbers</strong> — stable identifiers for document classification.</p>
+  <table>
+    <tr><th>Stage</th><th>Form</th><th>What it is</th></tr>
+    <tr><td rowspan="3">Pre-contract</td><td>RF101 / RF102</td><td>Exclusive Right to Sell Listing Agreement (Designated / Seller Agency)</td></tr>
+    <tr><td>RF141 / RF142</td><td>Exclusive Buyer Representation Agreement — post-2024, buyer compensation is negotiated here; an executed buyer-rep agreement must exist on every buyer-side file</td></tr>
+    <tr><td>RF201 / RF203 / RF304</td><td>TN Residential Property Condition Disclosure (statutory) / Exemption Notification / Disclaimer</td></tr>
+    <tr><td rowspan="2">The contract</td><td><strong>RF401</strong></td><td>Purchase and Sale Agreement — the standard resale contract statewide (condos: RF501 + RF709)</td></tr>
+    <tr><td>RF651 / RF707 / RF716</td><td>Counter Offer / Additional Contract Language / extra signature blocks</td></tr>
+    <tr><td rowspan="7">Mid-transaction</td><td>RF653</td><td>Amendment to Purchase and Sale Agreement (general-purpose)</td></tr>
+    <tr><td><strong>RF654</strong></td><td>Repair/Replacement <strong>Proposal</strong> — its delivery ENDS the inspection period and STARTS the resolution period</td></tr>
+    <tr><td>RF655</td><td>Repair/Replacement <strong>Amendment</strong> — the executed resolution</td></tr>
+    <tr><td>RF656</td><td><strong>Notification</strong> — multi-purpose notice: as-is acceptance, terminations (incl. failure-to-repair)</td></tr>
+    <tr><td>RF657</td><td>Closing Date / Possession Date Amendment</td></tr>
+    <tr><td>RF635</td><td>Minimum Appraised Value Contingency Addendum</td></tr>
+    <tr><td>RF62x / RF663</td><td>Situational addenda (temporary occupancy, first right of refusal) / Multiple Offer Disclosure</td></tr>
+  </table>
+  <div class="callout">
+    <strong>Local boards stack their own addenda on RF401.</strong> East TN boards: East Tennessee REALTORS (Knoxville), NETAR (Tri-Cities), Great Smoky Mountains AOR (Sevier Co.), River Counties AOR, Greater Chattanooga. Intake must capture which board's addenda apply — a wrong-county addendum creates enforceability questions at close.
+  </div>
+
+  <h2>3 · RF401 Deadline Mechanics (the Deadline Engine rule set)</h2>
+  <p>All periods run from the <strong>Effective Date = Binding Agreement Date</strong> (last signature + communicated acceptance).</p>
+  <table>
+    <tr><th>Deadline</th><th>Typical days from Effective Date</th><th>Cancellation right if missed</th></tr>
+    <tr><td>Earnest money delivery</td><td>3–5 (per contract)</td><td>Seller (after cure notice)</td></tr>
+    <tr><td>Seller property disclosure</td><td>Per local board</td><td>Buyer</td></tr>
+    <tr><td>Inspection period</td><td>7–14</td><td>Buyer</td></tr>
+    <tr><td>Financing contingency</td><td>21–30</td><td>Buyer</td></tr>
+    <tr><td>Appraisal contingency</td><td>21–30</td><td>Buyer</td></tr>
+    <tr><td>Title commitment review</td><td>Per contract</td><td>Buyer</td></tr>
+    <tr><td>Closing date</td><td>30–45</td><td>Either (breach)</td></tr>
+  </table>
+  <div class="callout risk">
+    <strong>The Inspection → Resolution two-stage clock (TN's trickiest deadline):</strong>
+    <ol>
+      <li>The Inspection Period runs its stated days.</li>
+      <li>Buyer's delivery of RF654 <strong>ends the inspection period early and starts the Resolution Period</strong> — the delivery day counts, even before the stated deadline.</li>
+      <li>By the Resolution Deadline one of three must exist or the contract <strong>auto-terminates with EM back to buyer</strong>: (a) executed RF655, (b) buyer's written as-is acceptance (RF656), or (c) a written extension amendment.</li>
+      <li>Performance dates on a weekend/federal holiday roll to the next business day — the engine needs a TN holiday calendar and actual delivery-date tracking, not just contract day counts.</li>
+      <li>Post-repair: RF656 also carries the buyer's termination right if seller misses the repair-completion deadline.</li>
+    </ol>
+  </div>
+
+  <h2>4 · East Tennessee Closing Convention (the big regional variable)</h2>
+  <div class="card">
+    <p>Tennessee has no attorney-closing statute, but practice splits by county:</p>
+    <table>
+      <tr><th>Closing model</th><th>Where</th></tr>
+      <tr><td>Title-company closings</td><td>Knoxville metro core (Knox, Blount, Anderson), Chattanooga (Hamilton), Nashville, Memphis</td></tr>
+      <tr><td>Attorney-led closings</td><td>Much of rural East TN by custom — Greene, Hawkins, Cocke, <strong>Sevier</strong>, Claiborne, Monroe, Polk and surrounding counties</td></tr>
+    </table>
+    <p><strong>System implication:</strong> the deal record's <code>Closing Model</code> is set at intake from the property's county (lookup table, overridable). It changes the closing-prep branch: who gets the commission demand, who issues the settlement statement, who confirms recording, and the final-week templates. The rolodex carries both title-closer and closing-attorney contact types.</p>
+  </div>
+
+  <h2>5 · Other TN-Specific Items</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Property condition disclosure</strong> (T.C.A. § 66-5-201 et seq.): required on most residential sales unless exempt (new construction, foreclosure → RF203 path). Tracker fields: required/exempt, delivered date, buyer-acknowledged date.</li>
+      <li><strong>Earnest money:</strong> holder can be a title company OR broker trust account (differs by region/office — captured at intake). Receipt confirmation is a first-week checklist item with escalation.</li>
+      <li><strong>Post-NAR settlement (July 2024 forms):</strong> buyer-side compensation lives in RF141/RF142 (+ any RF702 agreement); every buyer file must show the executed buyer-rep agreement, and compensation documentation must match the settlement statement at close.</li>
+      <li><strong>East TN market color:</strong> Sevier County (Gatlinburg/Pigeon Forge) = investor cabin/STR deals — often cash, 14–21 day timelines, attorney closings, HOA/resort assessments, STR-permit due diligence. The cash-deal branch (no financing/appraisal contingencies) gets real use here.</li>
+      <li><strong>Market precedent:</strong> SmoothTC is an existing TN-focused TC automation service — validation that this model sells in this market, and a feature-parity benchmark.</li>
+    </ul>
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice · Sources: TAR/NETAR form indexes, T.C.A. §§ 62-13-312 / 62-13-321 / 66-5-201, Tenn. Comp. R. &amp; Regs. 1260-02-.40</footer>
+</body>
+</html>

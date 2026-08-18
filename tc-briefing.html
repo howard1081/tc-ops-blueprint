@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TC Industry Briefing — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html" class="active">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">TC Industry Briefing</h1>
+  <p class="sub">What a transaction-coordination service does, the standard contract-to-close process, SkySlope's inner workings, and the competitive landscape.</p>
+
+  <h2>1 · What a TC Service Does</h2>
+  <div class="card">
+    <p>A <strong>Transaction Coordinator</strong> manages the administrative side of a deal from <strong>executed contract to recorded deed</strong>. The agent remains the decision-maker on price, negotiation, and strategy; the TC owns <strong>process, paperwork, deadlines, and communication</strong>.</p>
+    <table>
+      <tr><th>Responsibility</th><th>What it covers</th></tr>
+      <tr><td>Contract &amp; document management</td><td>Collect executed contracts, verify every signature/initial, organize the file, distribute to lender/title, keep the file broker-audit ready</td></tr>
+      <tr><td>Deadline tracking</td><td>Build the deadline calendar from the contract; reminders typically 48h and 24h before each deadline</td></tr>
+      <tr><td>Party coordination</td><td>Hub between both agents, lender, title/attorney, inspectors, appraiser, HOA, insurance</td></tr>
+      <tr><td>Compliance support</td><td>Files meet brokerage + state + MLS requirements; broker file assembled to audit standard</td></tr>
+    </table>
+    <div class="callout risk"><strong>What a TC does NOT do (legal boundary):</strong> negotiate, advise on price/terms/value, originate documents, interpret contracts for clients, or procure prospects. The automation respects the same line: <strong>the system executes; the agent decides.</strong></div>
+    <p><strong>Pricing norms:</strong> contract-to-close $300–$500/file; listing coordination $125–$350; combined $400–$600+. A TC's income scales with file capacity — systems and automation directly determine the earning ceiling.</p>
+  </div>
+
+  <h2>2 · The Standard Contract-to-Close Process</h2>
+  <table>
+    <tr><th>Phase</th><th>Days</th><th>Core work</th></tr>
+    <tr><td>1 · File Setup</td><td>0–3</td><td>Read the full contract + addenda; verify signatures/price/EM; build deadline calendar and contact sheet; file-opened emails; contract to title; notify lender</td></tr>
+    <tr><td>2 · Due Diligence</td><td>3–15</td><td>Inspection → repair request → amendment routing; appraisal tracking (low-appraisal alerts); title commitment review; weekly lender check-ins</td></tr>
+    <tr><td>3 · Pre-Closing</td><td>15–30</td><td>Clear-to-close; Closing Disclosure to buyer ≥3 business days before closing (TRID); CD reviewed line-by-line; schedule signing; wire instructions verified by phone; commission demand</td></tr>
+    <tr><td>4 · Closing &amp; Post-Closing</td><td>30+</td><td>Confirm funding/recording; assemble final broker compliance file; archive per retention rules</td></tr>
+  </table>
+  <p>A standard residential file runs ~30 days (14–21 cash, 45–60 complicated). Agent touchpoints are only three: intake hand-off, decision points, and closing — everything else is TC/system work.</p>
+
+  <h2>3 · SkySlope — Inner Workings</h2>
+  <div class="card">
+    <h3>Core objects &amp; compliance flow</h3>
+    <ul>
+      <li><strong>Listing files</strong> (seller side) vs. <strong>Transaction files</strong> (buyer side); created Pre-Contract or Under Contract; property pulled from MLS feed.</li>
+      <li><strong>Checklists</strong> are the compliance engine: broker-defined per deal type/office; agents upload docs against checklist items; missing items trigger daily reminders.</li>
+      <li><strong>Audit workflow:</strong> admins review docs (accept/reject) via Quick Audit, with AI Smart Assist scanning for missing signatures/initials.</li>
+    </ul>
+    <h3>Automation surfaces (what the system will use)</h3>
+    <table>
+      <tr><th>Surface</th><th>What it enables</th><th>Access</th></tr>
+      <tr><td><strong>Email-into-file</strong></td><td>Every file has a unique @skyslope.com address; any emailed attachment auto-uploads to the file's Documents tab</td><td>Works today, no API needed</td></tr>
+      <tr><td>Transaction Management APIs</td><td>Full file CRUD, admin-level visibility across the brokerage</td><td>Gated: order form via Customer Success Manager → Client Id/Secret + per-user Access Key/Secret (admin account available)</td></tr>
+      <tr><td>Forms Partnership API</td><td>OAuth 2.0; create files, contacts CRUD, upload/download docs, DigiSign envelopes, <strong>webhook for signed documents</strong></td><td>Partner onboarding</td></tr>
+    </table>
+    <div class="callout ok"><strong>Phasing implication:</strong> the first build runs entirely on email-into-file + human-in-SkySlope; API integration is a later upgrade once CSM credentials are issued.</div>
+  </div>
+
+  <h2>4 · Competitive Landscape</h2>
+  <table>
+    <tr><th>Product</th><th>Model</th><th>Gap this design exploits</th></tr>
+    <tr><td>Open to Close</td><td>$99–$399/mo automation platform</td><td>Heavy setup (reports of ~9 months to full value)</td></tr>
+    <tr><td>ListedKit</td><td>$14.99/intake, AI-first</td><td>Per-file pricing scales cost with volume</td></tr>
+    <tr><td>SkyTC</td><td>SkySlope's own outsourced TC service</td><td>Generic; not East-TN-specialized</td></tr>
+    <tr><td>SmoothTC</td><td>TN-focused TC automation (deadline calc, reminders)</td><td>Validation the model sells here; benchmark for parity</td></tr>
+  </table>
+
+  <h2>5 · Specialization Areas Built Into the Design</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Contract data extraction</strong> — LLM/OCR parsing of executed contracts into structured deadline data (the highest-leverage automation).</li>
+      <li><strong>TRID/RESPA</strong> — the CD 3-business-day rule and settlement-statement fee rules.</li>
+      <li><strong>Wire-fraud protocol</strong> — verbal verification as a hard, non-automatable checkpoint.</li>
+      <li><strong>E-signature law (ESIGN/UETA)</strong> — DigiSign envelope webhooks as clean automation triggers.</li>
+      <li><strong>Licensing-boundary engineering</strong> — "system may do" vs. "agent must do" encoded in workflow design.</li>
+      <li><strong>Error handling &amp; SLAs</strong> — retries, dead-letter handling, daily exceptions report; a missed reminder = potential lost earnest money.</li>
+      <li><strong>Data privacy</strong> — files contain PII/bank details; least-privilege access and retention planning from day one.</li>
+      <li><strong>Fee/billing automation</strong> — per-file invoicing triggered by the deal's "recorded" status.</li>
+    </ul>
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice · Sources: Freedom RES checklists, Quill TC guides, SkySlope support &amp; API docs</footer>
+</body>
+</html>

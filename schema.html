@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Schema — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html" class="active">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Database Schema — Airtable Base "TC Ops"</h1>
+  <p class="sub">One Airtable base is the single source of truth. Every worker reads and writes here; workers never pass data directly to each other — status fields ARE the handoffs. Auth: Airtable personal access token (no expiry, no 2FA friction), scoped to this base only.</p>
+
+  <div class="toc">
+    <strong>Tables</strong>
+    <a href="#deals">1 · Deals</a>
+    <a href="#contacts">2 · Contacts (Rolodex)</a>
+    <a href="#counties">3 · Counties</a>
+    <a href="#utilities">4 · Utilities</a>
+    <a href="#documents">5 · Documents</a>
+    <a href="#tasks">6 · Tasks</a>
+    <a href="#approvals">7 · Approval Queue</a>
+    <a href="#comms">8 · Comms Log</a>
+    <a href="#audit">9 · Audit Log</a>
+    <a href="#templates">10 · Templates</a>
+    <a href="#access">Worker Access Map</a>
+    <a href="#build">Build Order</a>
+  </div>
+
+  <h2 id="deals">Table 1 · Deals — one row per transaction</h2>
+
+  <h3>Identity &amp; parties</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Deal ID</td><td>Autonumber</td><td>e.g. <code>TC-2026-0042</code></td></tr>
+    <tr><td>Property Address</td><td>Text</td><td>Primary field</td></tr>
+    <tr><td>County</td><td>Link → Counties</td><td>Drives closing-model branch (attorney vs. title company)</td></tr>
+    <tr><td>MLS #</td><td>Text</td><td>For intake cross-check</td></tr>
+    <tr><td>Side</td><td>Single select</td><td>Buyer / Seller / Both</td></tr>
+    <tr><td>Our Agent</td><td>Link → Contacts</td><td></td></tr>
+    <tr><td>Co-op Agent</td><td>Link → Contacts</td><td>Other side</td></tr>
+    <tr><td>Client(s)</td><td>Link → Contacts</td><td>Buyer(s) / seller(s)</td></tr>
+    <tr><td>Lender</td><td>Link → Contacts</td><td>Blank if cash</td></tr>
+    <tr><td>Title / Closing</td><td>Link → Contacts</td><td>Title company OR closing attorney</td></tr>
+    <tr><td>Cash Deal?</td><td>Checkbox</td><td>Skips the lender worker entirely</td></tr>
+  </table>
+
+  <h3>Money &amp; contract terms</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Sale Price</td><td>Currency</td><td></td></tr>
+    <tr><td>Earnest Money Amount</td><td>Currency</td><td></td></tr>
+    <tr><td>EM Holder</td><td>Single select</td><td>Listing brokerage / Title / Attorney — differs by region &amp; office</td></tr>
+    <tr><td>Our Commission</td><td>Percent / Currency</td><td></td></tr>
+    <tr><td>Seller Credits</td><td>Currency</td><td></td></tr>
+  </table>
+
+  <h3>Dates (populated at intake, owned by the Deadline Engine)</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Binding Agreement Date</td><td>Date</td><td>Everything runs from this (TN "Effective Date")</td></tr>
+    <tr><td>Closing Date</td><td>Date</td><td></td></tr>
+    <tr><td>Possession Date</td><td>Date</td><td></td></tr>
+    <tr><td>EM Due Date</td><td>Date</td><td></td></tr>
+    <tr><td>Inspection Period End</td><td>Date</td><td>From the RF401 blanks</td></tr>
+    <tr><td>Resolution Period End</td><td>Date</td><td><strong>Event-driven</strong>: set only when RF654 delivery is logged</td></tr>
+    <tr><td>Financing Contingency Date</td><td>Date</td><td></td></tr>
+    <tr><td>Appraisal Ordered / Completed</td><td>Dates</td><td></td></tr>
+    <tr><td>Title Commitment Received</td><td>Date</td><td></td></tr>
+  </table>
+
+  <h3>Phase &amp; gate fields — the handoff mechanism</h3>
+  <p><span class="pill human">HUMAN GATE</span> statuses stop the pipeline until a person approves via the Approval Queue. All other transitions are <span class="pill machine">MACHINE</span> gates.</p>
+  <table>
+    <tr><th>Field</th><th>Values (in order)</th></tr>
+    <tr><td>Phase</td><td>Intake → Contingencies → Closing Prep → Closing → Post-Close → Archived / Terminated</td></tr>
+    <tr><td>Intake Status</td><td>new → parsed → <span class="gate">needs_human_verify</span> → verified → released</td></tr>
+    <tr><td>EM Status</td><td>pending → requested → receipt_received → verified</td></tr>
+    <tr><td>Inspection Status</td><td>n/a → scheduled → report_received → proposal_drafted → <span class="gate">awaiting_agent_approval</span> → sent_to_coop → resolved_amendment / resolved_asis / terminated</td></tr>
+    <tr><td>Financing Status</td><td>n/a (cash) → application_confirmed → appraisal_ordered → appraisal_received → clear_to_close</td></tr>
+    <tr><td>Title Status</td><td>opened → commitment_received → alta_received → <span class="gate">awaiting_alta_review</span> → alta_approved → booked</td></tr>
+    <tr><td>Closing Status</td><td>not_scheduled → proposed_to_client → scheduled → docs_requested → closed</td></tr>
+    <tr><td>SkySlope Status</td><td>file_created → docs_current → final_upload_done → broker_approved</td></tr>
+    <tr><td>On Hold / Blocked</td><td>Checkbox + reason — freezes all workers on this deal</td></tr>
+  </table>
+
+  <h2 id="contacts">Table 2 · Contacts — the Rolodex</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Name / Company</td><td>Text</td><td></td></tr>
+    <tr><td>Role</td><td>Multi select</td><td>Agent, Client, Lender, Title Co, Closing Attorney, Inspector, Insurance, Photographer, Other</td></tr>
+    <tr><td>Email / Phone</td><td>Email / Phone</td><td></td></tr>
+    <tr><td>Counties Served</td><td>Link → Counties</td><td></td></tr>
+    <tr><td>Preferred?</td><td>Checkbox</td><td>Agent-curated</td></tr>
+    <tr><td>Notes</td><td>Long text</td><td></td></tr>
+    <tr><td>Added / Updated By</td><td>Text</td><td>Agents update the rolodex via an Airtable form</td></tr>
+  </table>
+
+  <h2 id="counties">Table 3 · Counties</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>County Name</td><td>Text</td><td></td></tr>
+    <tr><td>Closing Model</td><td>Single select</td><td>Title Company / Attorney / Mixed — East TN splits by county custom</td></tr>
+    <tr><td>Local Board</td><td>Single select</td><td>East TN REALTORS, NETAR, GSMAR, River Counties, Chattanooga — determines addenda set</td></tr>
+    <tr><td>Utilities</td><td>Link → Utilities</td><td></td></tr>
+    <tr><td>Tax / Recorder notes</td><td>Long text</td><td></td></tr>
+  </table>
+
+  <h2 id="utilities">Table 4 · Utilities — the utilities index</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Provider</td><td>Text</td><td></td></tr>
+    <tr><td>Type</td><td>Single select</td><td>Electric / Water / Gas / Internet / Trash</td></tr>
+    <tr><td>Phone / Setup URL</td><td>Phone / URL</td><td></td></tr>
+    <tr><td>Counties Served</td><td>Link → Counties</td><td>Feeds the client utility-info email automatically by county</td></tr>
+  </table>
+
+  <h2 id="documents">Table 5 · Documents</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Deal</td><td>Link → Deals</td><td></td></tr>
+    <tr><td>Doc Type</td><td>Single select</td><td>TAR vocabulary: RF401, RF651, RF653, RF654, RF655, RF656, RF657, RF201, LBP, EM receipt, ALTA, CD, misc…</td></tr>
+    <tr><td>Status</td><td>Single select</td><td>expected → received → classified → <span class="gate">needs_review</span> → filed_skyslope</td></tr>
+    <tr><td>Storage Link</td><td>URL</td><td>File-storage path</td></tr>
+    <tr><td>SkySlope Checklist Item</td><td>Text</td><td>Which checklist slot it satisfies</td></tr>
+    <tr><td>Received / Filed Dates</td><td>Dates</td><td></td></tr>
+  </table>
+  <div class="callout">The "50+ outstanding documents" view from the brainstorm = a saved Airtable view filtered to <code>Status ≠ filed_skyslope</code>, grouped by deal. Checklist templates (buyer / seller / cash / financed) pre-populate the expected rows when a deal is created.</div>
+
+  <h2 id="tasks">Table 6 · Tasks — Deadline Engine output</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Deal</td><td>Link → Deals</td><td></td></tr>
+    <tr><td>Task</td><td>Text</td><td>e.g. "Chase EM receipt", "Check in w/ title (day 14)"</td></tr>
+    <tr><td>Owner</td><td>Single select</td><td>Which worker — or Human</td></tr>
+    <tr><td>Due Date</td><td>Date</td><td>Computed with TN weekend/holiday roll-forward</td></tr>
+    <tr><td>Status</td><td>Single select</td><td>pending → in_progress → done → escalated</td></tr>
+    <tr><td>Triggering Event</td><td>Text</td><td>Audit trail of <em>why</em> this task exists</td></tr>
+  </table>
+
+  <h2 id="approvals">Table 7 · Approval Queue — the human gates</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Deal</td><td>Link → Deals</td><td></td></tr>
+    <tr><td>Gate Type</td><td>Single select</td><td>Verify Intake Data / Release Repair Proposal / Approve Amendment-Extension / ALTA Review / Wire-adjacent / Other</td></tr>
+    <tr><td>Staged Action</td><td>Long text</td><td>Exactly what will happen on approve</td></tr>
+    <tr><td>Attachments</td><td>Link → Documents</td><td></td></tr>
+    <tr><td>Decision</td><td>Single select</td><td>pending → approved → rejected (with reason)</td></tr>
+    <tr><td>Decided By / At</td><td>Text / Timestamp</td><td></td></tr>
+  </table>
+  <div class="callout ok">Approving flips the corresponding Deals status field; downstream workers wake up. Rejection returns the deal to the staging worker with the reason.</div>
+
+  <h2 id="comms">Table 8 · Comms Log</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Deal</td><td>Link → Deals</td><td></td></tr>
+    <tr><td>Direction / Channel</td><td>Single selects</td><td>In / Out · Email (SMS later)</td></tr>
+    <tr><td>From / To</td><td>Text</td><td></td></tr>
+    <tr><td>Subject / Summary</td><td>Text</td><td></td></tr>
+    <tr><td>Template Used</td><td>Link → Templates</td><td></td></tr>
+    <tr><td>Timestamp / Worker</td><td>Timestamp / Text</td><td>Logged <strong>before</strong> sending</td></tr>
+  </table>
+  <div class="callout">Together with the storage archive and SkySlope, this satisfies TN REC's 3-year retention and 24-hour retrievability requirements.</div>
+
+  <h2 id="audit">Table 9 · Audit Log — append-only</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th></tr>
+    <tr><td>Timestamp</td><td>Timestamp</td></tr>
+    <tr><td>Worker</td><td>Text</td></tr>
+    <tr><td>Deal</td><td>Link → Deals</td></tr>
+    <tr><td>Action / Field Changed</td><td>Text</td></tr>
+    <tr><td>Old → New Value</td><td>Text</td></tr>
+    <tr><td>Trigger</td><td>Text</td></tr>
+    <tr><td>Result</td><td>Success / Error (detail)</td></tr>
+  </table>
+  <div class="callout ok">This is the diagnosis table: when anything stalls or breaks, this shows which worker, which deal, which gate, and why.</div>
+
+  <h2 id="templates">Table 10 · Templates</h2>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>Name / Purpose</td><td>Text / Single select</td><td>Client update, EM chase, lender check-in, utility info, closing details, review request…</td></tr>
+    <tr><td>Subject / Body</td><td>Text / Long text</td><td>Merge fields from Deals + Contacts</td></tr>
+    <tr><td>Brand Kit</td><td>Attachments / Text</td><td>Logo, color palette, footer disclaimer — the design element</td></tr>
+    <tr><td>Version / Active?</td><td>Number / Checkbox</td><td>Old versions retained for the audit trail</td></tr>
+  </table>
+
+  <h2 id="access">Worker ↔ Table Access Map (least privilege)</h2>
+  <table>
+    <tr><th>Worker</th><th>Writes</th><th>Reads</th></tr>
+    <tr><td>1 · Intake / Parser</td><td>Deals (identity, terms, dates, Intake Status), Documents</td><td>Contacts, Counties</td></tr>
+    <tr><td>2 · Deadline Engine</td><td>Tasks, Deals (Phase)</td><td>Deals dates &amp; statuses</td></tr>
+    <tr><td>3 · Comms / Follow-up</td><td>Comms Log, Task status</td><td>Templates, Contacts, Deals</td></tr>
+    <tr><td>4 · Document Handler</td><td>Documents, Deals (SkySlope Status)</td><td>Deals</td></tr>
+    <tr><td>5 · Repairs / Amendments</td><td>Approval Queue, Deals (Inspection Status)</td><td>Documents, Deals</td></tr>
+    <tr><td>6 · Title / Closing</td><td>Deals (Title &amp; Closing Status), Approval Queue</td><td>Contacts, Deals</td></tr>
+    <tr><td>7 · Post-Close</td><td>Deals (Phase → Archived), Comms Log, CRM push</td><td>Deals, Templates</td></tr>
+    <tr><td><em>All workers</em></td><td>Audit Log (append only)</td><td>—</td></tr>
+  </table>
+
+  <h2 id="build">Build Order</h2>
+  <div class="card">
+    <ol>
+      <li>Create the base + Deals / Contacts / Counties / Utilities — manual data entry works from day one; humans can run the whole process on this base before any bot exists.</li>
+      <li>Documents table + checklist templates.</li>
+      <li>Tasks + Approval Queue + Audit Log.</li>
+      <li>Templates with the brand kit.</li>
+      <li>Then wire workers one at a time, starting with Intake / Parser — each worker goes live only after its section of this blueprint is approved.</li>
+    </ol>
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice</footer>
+</body>
+</html>

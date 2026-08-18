@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worker Architecture — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html" class="active">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Worker Architecture</h1>
+  <p class="sub">Seven specialized workers (n8n workflows), each single-purpose. They never talk to each other — every handoff happens through status fields in the shared database.</p>
+
+  <div class="callout ok">
+    <strong>Design rationale:</strong> many small workers are easier to diagnose than one big bot — when something breaks, the deal record and audit log show exactly which worker failed, at which gate, on which deal. But bot count alone doesn't create diagnosability; the shared database + append-only audit log do.
+  </div>
+
+  <h2>The Company Structure</h2>
+  <table>
+    <tr><th>#</th><th>Worker</th><th>Role (its "job description")</th><th>Wakes up when…</th><th>Hands off by…</th></tr>
+    <tr><td>1</td><td><strong>Intake / Parser</strong></td><td>Receives executed contracts, extracts every field, cross-checks MLS, creates the deal record and document checklist</td><td>Contract email arrives</td><td>Setting <code>Intake Status → needs_human_verify</code>; human verify releases the deal</td></tr>
+    <tr><td>2</td><td><strong>Deadline Engine</strong></td><td>Computes and watches every date (TN business-day roll rules, event-driven resolution clock), creates tasks for other workers, escalates overdue items</td><td>Deal released; any date field changes; daily cron</td><td>Writing rows to the Tasks table</td></tr>
+    <tr><td>3</td><td><strong>Comms / Follow-up</strong></td><td>Sends all templated outbound email — client updates, EM chases, lender check-ins, utility info — and logs every message</td><td>A task assigned to it comes due</td><td>Logging to Comms Log, marking the task done</td></tr>
+    <tr><td>4</td><td><strong>Document Handler</strong></td><td>Classifies inbound documents by TAR RF number, files to storage + SkySlope, maintains the outstanding-documents list</td><td>Any inbound attachment on a deal</td><td>Updating Documents status; flagging unknowns for review</td></tr>
+    <tr><td>5</td><td><strong>Repairs / Amendments Router</strong></td><td>Drafts repair proposals and amendments, stages them for agent approval, routes executed versions, logs delivery events that re-anchor deadlines</td><td>Inspection report received; amendment requested</td><td>Staging to the Approval Queue; only sends after approval</td></tr>
+    <tr><td>6</td><td><strong>Title / Closing Coordinator</strong></td><td>Title/attorney check-ins, closing scheduling, ALTA/settlement staging for human review, closing-week logistics</td><td>Phase → Closing Prep; title documents arrive</td><td>Updating Title/Closing status; staging ALTA review</td></tr>
+    <tr><td>7</td><td><strong>Post-Close</strong></td><td>Final SkySlope upload verification, review/referral email, CRM update, retention archive</td><td>Closing confirmed (recorded/funded)</td><td>Setting Phase → Archived</td></tr>
+  </table>
+
+  <h2>The Handoff Protocol</h2>
+  <div class="card">
+    <p>The single biggest fail point in a multi-worker system is a worker acting on stale or unvetted state. The protocol prevents it:</p>
+    <ol>
+      <li><strong>Status fields are the handoff.</strong> Each stage of a deal carries a status field (e.g. <code>intake_status: new → parsed → needs_human_verify → verified → released</code>). A downstream worker only wakes when the status it subscribes to flips.</li>
+      <li><strong>Write immediately.</strong> A worker writes its results to the database in the same run, before doing anything else. No worker holds state privately.</li>
+      <li><strong>Re-read at execution time.</strong> A worker re-fetches the deal record the moment it acts — never acting on data it pulled earlier.</li>
+      <li><strong>Gates cannot be skipped.</strong> Statuses only advance in order; a worker cannot jump a deal past a gate it doesn't own.</li>
+      <li><strong>Everything logs.</strong> Every status change, gate pass/fail, and error appends to the Audit Log: timestamp, worker, deal, field, old → new, trigger.</li>
+    </ol>
+  </div>
+
+  <h2>Machine Gates vs. Human Gates</h2>
+  <table>
+    <tr><th>Gate type</th><th>Governs</th><th>Mechanism</th></tr>
+    <tr><td><span class="pill machine">MACHINE</span></td><td>Routine handoffs: parsed → next worker, document filed → checklist ticked, task due → email sent</td><td>Status field flips automatically when the worker completes its step successfully</td></tr>
+    <tr><td><span class="pill human">HUMAN</span></td><td>Judgment, money, and anything crossing to the other side</td><td>Worker stages the action in the Approval Queue with exactly what will happen; a person approves/rejects; approval flips the status</td></tr>
+  </table>
+
+  <h3>The Human Gate List (proposed — review this)</h3>
+  <table>
+    <tr><th>Gate</th><th>Why it's human</th></tr>
+    <tr><td>Contract data verification after intake</td><td>A bad extracted date poisons every downstream deadline — non-negotiable</td></tr>
+    <tr><td>Repair proposal release to co-op side</td><td>The "approval click" — negotiation-adjacent, crosses to the other side</td></tr>
+    <tr><td>Amendments &amp; extensions (price, credits, dates)</td><td>Contract terms change — agent decision by law and by sense</td></tr>
+    <tr><td>ALTA / settlement statement sign-off</td><td>Money reconciliation — commissions, prorations, credits</td></tr>
+    <tr><td>Wire-adjacent anything</td><td>Wire fraud is the #1 loss vector; verbal verification only, never automated</td></tr>
+    <tr><td>Unclassifiable / suspicious inbound documents</td><td>Better a 10-minute human review than a misfiled contract document</td></tr>
+  </table>
+
+  <div class="callout risk">
+    <strong>Deliberate trade-off:</strong> not every handoff is human-gated — with 30 active deals, a human gate on every step makes the approver the bottleneck and re-creates the manual process. Human gates are reserved for the six categories above; everything else is machine-gated with full audit logging.
+  </div>
+
+  <h2>Worker Resources (rules, not guesswork)</h2>
+  <div class="card">
+    <p>Each worker operates from data, never improvisation:</p>
+    <ul>
+      <li><strong>SOP per worker</strong> — its role, allowed actions, escalation triggers ("company structure": what it does, why, and the edges of its job).</li>
+      <li><strong>Rolodex tables</strong> — lenders, title companies, closing attorneys (county-mapped), inspectors, utilities.</li>
+      <li><strong>TAR form catalog</strong> — RF-number vocabulary for classification and deadline events.</li>
+      <li><strong>TN deadline rules</strong> — business-day roll-forward, federal holiday table, the RF654 event-driven resolution clock.</li>
+      <li><strong>Templates library</strong> — every outbound email from an approved, branded template (logo, palette, disclaimer).</li>
+      <li><strong>Escalation matrix</strong> — one human queue (the Approval Queue), not per-worker escalation paths.</li>
+    </ul>
+  </div>
+
+  <h2>Failure Handling</h2>
+  <div class="card">
+    <ul>
+      <li>A worker error never silently drops a deal: errors write to the Audit Log and create an escalated task.</li>
+      <li>The <code>On Hold / Blocked</code> flag on a deal freezes all workers on that deal instantly.</li>
+      <li>A daily exceptions digest lists every deal stuck at a gate &gt; N hours, every errored run, and every overdue task.</li>
+      <li>Any single worker can be switched off and its duties run manually from the database — the manual fallback is a design requirement, not an accident.</li>
+    </ul>
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice</footer>
+</body>
+</html>
