@@ -43,6 +43,18 @@
     <tr><td>8</td><td><strong>Manager (Rulebook)</strong></td><td>Sits on the Approval Queue and applies the versioned, human-authored decision rulebook: exact rule match → auto-approve (stamped "approved by Policy vN, rule X"); no match → escalate to the human via Twilio SMS. Never interprets or guesses.</td><td>Any item lands in the Approval Queue</td><td>Approving (flips the deal's status) or escalating (SMS + queue stays pending)</td></tr>
   </table>
 
+  <h2>Buyer Side vs. Seller Side</h2>
+  <div class="card">
+    <p><strong>One worker team, side-aware playbooks.</strong> There are no separate buyer-side and seller-side workers. The <code>Side</code> field on the deal (Buyer / Seller / Both) selects which playbook loads at intake — the difference between sides lives in <strong>data</strong>, not duplicate bots:</p>
+    <table>
+      <tr><th>Side-specific</th><th>Buyer side emphasis</th><th>Seller side emphasis</th></tr>
+      <tr><td>Checklist template</td><td>Lender application confirmed, earnest money chase, inspection scheduling, appraisal, clear-to-close</td><td>Disclosures delivered (RF201/RF203), repair-response handling, utility handoff, sign/lockbox removal</td></tr>
+      <tr><td>Email templates</td><td>Buyer-facing updates: financing milestones, utility set-up for the move-in</td><td>Seller-facing updates: showing-to-close status, repair completion receipts, utility shut-off</td></tr>
+      <tr><td>Rulebook rules</td><td>Rules keyed to buyer-side gates (e.g. repair <em>requests</em> going out)</td><td>Rules keyed to seller-side gates (e.g. repair <em>responses</em> coming back)</td></tr>
+    </table>
+    <p>Why not separate handlers: duplicate workers double the maintenance surface, split the rulebook, and break on dual-agency (<code>Both</code>) deals where two handlers would fight over one record. The Deadline Engine's date math, document filing, audit logging, and Twilio escalation are identical for both sides — only the task list, templates, and rules differ, and those are rows in tables, not code.</p>
+  </div>
+
   <h2>The Handoff Protocol</h2>
   <div class="card">
     <p>The single biggest fail point in a multi-worker system is a worker acting on stale or unvetted state. The protocol prevents it:</p>
