@@ -99,6 +99,24 @@
     <p>An unanswered text can never silently let a deadline blow — the ladder ends in a hard stop, not a hope.</p>
   </div>
 
+  <h2>The Approve Screen — how the human responds to a text</h2>
+  <div class="card">
+    <p>The human never approves by texting back. Every escalation SMS contains a link to a <strong>one-item mobile approve screen</strong> (an Airtable interface page) showing everything needed to decide on the spot:</p>
+    <div class="flow">
+      <span class="step">SMS: deal + what's stuck + link</span><span class="arrow">→</span>
+      <span class="step human">One-page screen: the document itself, the rule miss, deal context</span><span class="arrow">→</span>
+      <span class="step human">Approve / Reject (+ note)</span><span class="arrow">→</span>
+      <span class="step">Status flips, decision + who/when logged to Audit Log</span>
+    </div>
+    <ul>
+      <li><strong>One link = one queue item.</strong> The page shows exactly one decision — no wrong-deal risk when two texts arrive back to back.</li>
+      <li><strong>Evidence on screen.</strong> The actual document and the reason for escalation are visible before the buttons — the human decides while looking at the evidence, not from a 160-character summary.</li>
+      <li><strong>Authenticated.</strong> The screen requires login — a click is attributable; a text message is not.</li>
+      <li><strong>~15 seconds on a phone</strong>, fully audit-logged.</li>
+    </ul>
+    <div class="callout risk"><strong>Why not reply-YES-to-approve?</strong> SMS replies approve from memory, can land on the wrong deal, can be autocorrect or a pocket-text, and carry no login. Reply-by-text is allowed for exactly one narrow class: <strong>pure acknowledgments where nothing is released</strong> — e.g. "reminder: verify wire instructions verbally — reply DONE when called." Anything that flips a deal's status goes through the approve screen.</div>
+  </div>
+
   <div class="callout risk">
     <strong>Deliberate trade-off:</strong> not every handoff is human-gated — with 30 active deals, a human gate on every step makes the approver the bottleneck and re-creates the manual process. Human involvement is reserved for the gates above, rule misses, and rulebook maintenance; everything else is machine-gated or Manager-vetted with full audit logging.
   </div>
