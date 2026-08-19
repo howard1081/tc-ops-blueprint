@@ -1,0 +1,50 @@
+name: 🅰️ Topic A — Intake & contract reading
+description: 'Answer round 1 questions: Intake & contract reading'
+title: 'Answers: Topic A — Intake & contract reading'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: a1
+  attributes:
+    label: A1 — Counter offers
+    description: When a counter offer changes terms, should the system treat the LAST EXECUTED DOCUMENT as the source of truth for every field, or only for the fields the counter mentions?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: a2
+  attributes:
+    label: A2 — Special stipulations
+    description: '"Must log written special stips" — where do special stipulations need to appear afterward (client update? task list? SkySlope checklist?) and who reviews them?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: a3
+  attributes:
+    label: A3 — Septic
+    description: When a house has septic, where does the septic file/permit come from (seller, county records, co-op agent), and who chases it?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: a4
+  attributes:
+    label: A4 — Lead paint year
+    description: The notes say "built before 1976 = lead base paint." Federal disclosure applies to pre-1978 — is 1978 intended?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: a5
+  attributes:
+    label: A5 — MLS conflicts
+    description: 'MLS pull (deal + photo): if MLS data conflicts with the contract (price, address spelling, etc.), which wins, and does the mismatch need to go to a person?'
+    placeholder: Type your answer here...
+  validations:
+    required: false

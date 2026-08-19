@@ -1,0 +1,42 @@
+name: 🏛️ Topic E — Title & closing
+description: 'Answer round 1 questions: Title & closing'
+title: 'Answers: Topic E — Title & closing'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: e1
+  attributes:
+    label: E1 — Title chase
+    description: Title is asked on day 14 whether title work came back — if it hasn't, what's the chase cadence and when does it escalate to a person?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: e2
+  attributes:
+    label: E2 — Closing time
+    description: Who is asked first for the closing time (client or title), and how many attempts before a person steps in?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: e3
+  attributes:
+    label: E3 — Settlement review email
+    description: The settlement review email "includes blank inspection + disclosure update" — what exactly is attached and who receives it?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: e4
+  attributes:
+    label: E4 — Closing invite + final inspection
+    description: Closing calendar invite goes to agent + final inspection "IF agent provides it" — provides what (the time? access?), and what happens when they don't?
+    placeholder: Type your answer here...
+  validations:
+    required: false

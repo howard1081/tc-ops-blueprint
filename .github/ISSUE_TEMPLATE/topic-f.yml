@@ -1,0 +1,18 @@
+name: 🚫 Topic F — Wire policy
+description: 'Answer round 1 questions: Wire policy'
+title: 'Answers: Topic F — Wire policy'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: f1
+  attributes:
+    label: F1 — No-wire scope + standard reply
+    description: '"Remove ALL wire stuff — we don''t handle": confirm we never store, forward, or confirm wiring instructions. What is the exact standard reply when a client or co-op asks us for wiring info (e.g. "contact the closing attorney/title company directly by phone")?'
+    placeholder: Type your answer here...
+  validations:
+    required: false

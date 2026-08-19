@@ -1,0 +1,26 @@
+name: ⏰ Topic G — Escalation & deadline behavior
+description: 'Answer round 1 questions: Escalation & deadline behavior'
+title: 'Answers: Topic G — Escalation & deadline behavior'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: g1
+  attributes:
+    label: G1 — Day-of alert time
+    description: '"Escalate DAY OF, not overdue" — what time of day should the day-of alert fire (e.g. 8am)?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: g2
+  attributes:
+    label: G2 — Unanswered alert
+    description: If a day-of alert goes unanswered and the deadline passes anyway, the blueprint freezes the deal (On Hold) and sends an urgent text. Is that the right behavior, or should anything else happen?
+    placeholder: Type your answer here...
+  validations:
+    required: false

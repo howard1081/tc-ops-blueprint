@@ -1,0 +1,42 @@
+name: 🔧 Topic C — Repairs & appraisal
+description: 'Answer round 1 questions: Repairs & appraisal'
+title: 'Answers: Topic C — Repairs & appraisal'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: c1
+  attributes:
+    label: C1 — Repair proposal release
+    description: '"STOP at drafts repair proposal" — after the draft, who exactly clicks release (our agent always? ever the TC?), and how is that approval given today?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: c2
+  attributes:
+    label: C2 — 14-day appraisal rule
+    description: '"Appraisal must be ordered within 14 days of binding" — is that contract language, lender practice, or office policy? Does it vary by deal?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: c3
+  attributes:
+    label: C3 — Day-13 reminder
+    description: The day-13 reminder goes "to agent w/ deadline" — which agent (ours? buyer's?), and what should happen if they don't respond by the deadline?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: c4
+  attributes:
+    label: C4 — Amendment date resets
+    description: If the repair amendment changes dates (e.g. extends closing), does the amendment automatically reset the downstream deadline calendar, or does a person re-verify the new dates first?
+    placeholder: Type your answer here...
+  validations:
+    required: false

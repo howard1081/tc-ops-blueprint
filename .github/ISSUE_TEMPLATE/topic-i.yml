@@ -1,0 +1,42 @@
+name: 🧩 Topic I — Open workers, forms & seller side
+description: 'Answer round 1 questions: Open workers, forms & seller side'
+title: 'Answers: Topic I — Open workers, forms & seller side'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: i1
+  attributes:
+    label: I1 — Canva worker
+    description: '"Canva worker?" appears twice — what branded/graphic output do you want produced (client update graphics, closing gift cards, social posts?), and at which steps?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: i2
+  attributes:
+    label: I2 — Home warranty
+    description: '"Worker to order warranty?" — who orders the home warranty, when, with which vendor, and who pays?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: i3
+  attributes:
+    label: I3 — Buyer TAR forms
+    description: '"Buyer TAR forms not listed" — which forms should be added to the catalog (RF141/RF142 buyer rep? others?)'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: i4
+  attributes:
+    label: I4 — Seller side
+    description: These notes read buyer-side. What are the biggest differences in your process when we're the LISTING side?
+    placeholder: Type your answer here...
+  validations:
+    required: false

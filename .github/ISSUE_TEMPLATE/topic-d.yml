@@ -1,0 +1,34 @@
+name: 📬 Topic D — Client updates & utilities
+description: 'Answer round 1 questions: Client updates & utilities'
+title: 'Answers: Topic D — Client updates & utilities'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: d1
+  attributes:
+    label: D1 — Update 1 contents
+    description: '"Update 1 with utilities" — what else goes in Update 1 besides the utilities list? Is there a fixed schedule of updates (1, 2, 3...) per deal?'
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: d2
+  attributes:
+    label: D2 — Utilities lookup
+    description: Notes say "google the address" — should the system prefer a maintained per-county utilities index and only google when the county index has no entry?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: d3
+  attributes:
+    label: D3 — Who gets updates
+    description: Utilities go to the BUYER (buyer-agent crossed out) — do all client updates go direct to the client? Is the agent cc'd or not?
+    placeholder: Type your answer here...
+  validations:
+    required: false

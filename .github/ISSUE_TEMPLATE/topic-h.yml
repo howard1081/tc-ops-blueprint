@@ -1,0 +1,26 @@
+name: 📇 Topic H — Contacts & Rolodex
+description: 'Answer round 1 questions: Contacts & Rolodex'
+title: 'Answers: Topic H — Contacts & Rolodex'
+labels:
+- question-round-1
+- answers
+body:
+- type: markdown
+  attributes:
+    value: Answer each question in its box below, then press **Submit new issue** at the bottom. Short answers are perfect, and "it depends" is fine — just say what it depends on. You can leave a box blank and come back to it in a later round. Every answer becomes a written rule (condition → action → who authorized it) in the system's rulebook.
+- type: textarea
+  id: h1
+  attributes:
+    label: H1 — Lookup order
+    description: When the lender or title contact isn't in the file (~50/50 per the notes), where should the system look, in what order (our rolodex → MLS → company website → ask our agent)?
+    placeholder: Type your answer here...
+  validations:
+    required: false
+- type: textarea
+  id: h2
+  attributes:
+    label: H2 — Verify before emailing
+    description: When a contact is found by lookup, does a person confirm it before the system emails deal documents to it, or is lookup-confidence enough for routine (non-document) emails?
+    placeholder: Type your answer here...
+  validations:
+    required: false
