@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question Round — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="questions.html" class="active">Question Round</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Question Round 1 — for the TC Manager</h1>
+  <p class="sub">Built from the manager's handwritten notes. Every answer becomes a written rule (condition → action → who authorized it) in the rulebook the system will follow. Precise answers beat long answers — and "it depends" is a fine answer, just say what it depends on.</p>
+
+  <h2>How to Answer (no paper, no Google)</h2>
+  <div class="card">
+    <p>Each topic below has an <strong>Answer on GitHub</strong> button. It opens that topic's discussion thread — type answers in the comment box at the bottom and press <em>Comment</em>. That's it. Answers are timestamped, permanent, and become the rulebook.</p>
+    <div class="flow">
+      <span class="step">Open the topic thread</span><span class="arrow">→</span>
+      <span class="step human">Type answers in the comment box</span><span class="arrow">→</span>
+      <span class="step">We convert each answer into a rule candidate</span><span class="arrow">→</span>
+      <span class="step human">You approve the resulting rulebook update on this site</span>
+    </div>
+  </div>
+
+  <h2>What the Notes Already Settled (no questions needed)</h2>
+  <div class="card">
+    <p>Before the questions — the manager's notes <strong>confirmed</strong> several design decisions and <strong>extended</strong> others. These are logged and will be folded into the blueprint after this round:</p>
+    <table>
+      <tr><th></th><th>From the notes</th><th>What it means for the design</th></tr>
+      <tr><td><span class="pill machine">CONFIRMS</span></td><td>"We NEVER handle wiring instructions — remove all wire stuff"</td><td>Even stronger than the blueprint: wiring is out of the service's scope entirely — never stored, forwarded, or confirmed</td></tr>
+      <tr><td><span class="pill machine">CONFIRMS</span></td><td>"STOP at drafts repair proposal!"</td><td>Repairs worker drafts only; release is gated — exactly as designed</td></tr>
+      <tr><td><span class="pill machine">CONFIRMS</span></td><td>"Reader worker checks specific lines, copies on white board"</td><td>Intake worker + shared database + deadline rules as data</td></tr>
+      <tr><td><span class="pill human">EXTENDS</span></td><td>"Deadline Engine — escalate DAY OF, not overdue"</td><td>Escalation fires the morning a deadline is due, not after it blows</td></tr>
+      <tr><td><span class="pill human">EXTENDS</span></td><td>"Won't have lender or title email ~50/50, needs looking up a lot"</td><td>Intake gains a contact-lookup step; the Rolodex grows itself from every deal</td></tr>
+      <tr><td><span class="pill human">EXTENDS</span></td><td>Septic → septic file; pre-1978 → lead paint; log special stips; MLS pull + photo</td><td>Intake checklist gains conditional document requirements</td></tr>
+      <tr><td><span class="pill human">EXTENDS</span></td><td>"If counter offer, terms in counter replace contract"</td><td>Parser precedence rule: last-executed terms override base contract fields</td></tr>
+      <tr><td><span class="pill human">EXTENDS</span></td><td>EM receipt branch; day-13 appraisal reminder; closing calendar invites; buyer TAR forms</td><td>New checklist tasks, deadline rules, and form-catalog additions</td></tr>
+    </table>
+  </div>
+
+  <h2>The Questions</h2>
+
+  <h3>Topic A — Intake &amp; contract reading</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>A1</td><td>Counter offers: should the system treat the <em>last executed document</em> as the source of truth for every field, or only the fields the counter mentions?</td></tr>
+      <tr><td>A2</td><td>"Must log written special stips" — where must special stipulations appear afterward (client update? task list? SkySlope checklist?) and who reviews them?</td></tr>
+      <tr><td>A3</td><td>Septic: where does the septic file/permit come from (seller, county records, co-op agent), and who chases it?</td></tr>
+      <tr><td>A4</td><td>Notes say "built before 1976 = lead base paint." Federal disclosure applies to pre-<strong>1978</strong> — confirm 1978 is intended.</td></tr>
+      <tr><td>A5</td><td>MLS pull: if MLS data conflicts with the contract, which wins, and does the mismatch go to a person?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/1">Answer Topic A on GitHub →</a>
+  </div>
+
+  <h3>Topic B — Earnest money</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>B1</td><td>Day 3–5 "1 is good" — what does this refer to?</td></tr>
+      <tr><td>B2</td><td>Confirm the EM branch: co-op provides receipt → we file in SkySlope; when <em>we</em> hold EM, the doc originates in SkySlope, nothing to chase — correct?</td></tr>
+      <tr><td>B3</td><td>If the EM receipt hasn't arrived by the deadline, what's the chase cadence, and when does a person get pulled in?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/2">Answer Topic B on GitHub →</a>
+  </div>
+
+  <h3>Topic C — Repairs &amp; appraisal</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>C1</td><td>"STOP at drafts repair proposal" — who exactly clicks release (our agent always? ever the TC?), and how is that approval given today?</td></tr>
+      <tr><td>C2</td><td>"Appraisal within 14 days of binding" — contract language, lender practice, or office policy? Does it vary by deal?</td></tr>
+      <tr><td>C3</td><td>Day-13 reminder "to agent w/ deadline" — which agent, and what happens if they don't respond by the deadline?</td></tr>
+      <tr><td>C4</td><td>If a repair amendment changes dates, does the deadline calendar reset automatically or does a person re-verify the new dates first?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/3">Answer Topic C on GitHub →</a>
+  </div>
+
+  <h3>Topic D — Client updates &amp; utilities</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>D1</td><td>"Update 1 with utilities" — what else goes in Update 1? Is there a fixed schedule of updates per deal?</td></tr>
+      <tr><td>D2</td><td>Should the system prefer a maintained per-county utilities index and only google when the index has no entry?</td></tr>
+      <tr><td>D3</td><td>Utilities go to the <em>buyer</em> (buyer-agent crossed out) — do all client updates go direct to the client, agent cc'd or not?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/4">Answer Topic D on GitHub →</a>
+  </div>
+
+  <h3>Topic E — Title &amp; closing</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>E1</td><td>Title work not back on day 14 — chase cadence, and when does it escalate to a person?</td></tr>
+      <tr><td>E2</td><td>Closing time: who is asked first (client or title), and how many attempts before a person steps in?</td></tr>
+      <tr><td>E3</td><td>Settlement review email "includes blank inspection + disclosure update" — confirm exactly what's attached and who receives it.</td></tr>
+      <tr><td>E4</td><td>Closing calendar invite + final inspection "IF agent provides it" — provides what, and what happens when they don't?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/5">Answer Topic E on GitHub →</a>
+  </div>
+
+  <h3>Topic F — Wire policy</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>F1</td><td>Confirm the scope of "remove ALL wire stuff": we never store, forward, or confirm wiring instructions. What is the exact standard reply when a client or co-op asks for wiring info?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/6">Answer Topic F on GitHub →</a>
+  </div>
+
+  <h3>Topic G — Escalation &amp; deadline behavior</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>G1</td><td>"Escalate DAY OF, not overdue" — what time should the day-of alert fire (e.g. 8am)?</td></tr>
+      <tr><td>G2</td><td>If a day-of alert goes unanswered and the deadline passes, the blueprint freezes the deal (On Hold) + urgent text. Right behavior, or should anything else happen?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/7">Answer Topic G on GitHub →</a>
+  </div>
+
+  <h3>Topic H — Contacts &amp; Rolodex</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>H1</td><td>Missing lender/title contact (~50/50): where should the system look, in what order (our rolodex → MLS → company website → ask our agent)?</td></tr>
+      <tr><td>H2</td><td>Does a person confirm a looked-up contact before deal documents are emailed to it, or is lookup enough for routine non-document emails?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/8">Answer Topic H on GitHub →</a>
+  </div>
+
+  <h3>Topic I — Open workers, forms &amp; seller side</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Question</th></tr>
+      <tr><td>I1</td><td>"Canva worker?" (appears twice) — what branded/graphic output do you want, and at which steps?</td></tr>
+      <tr><td>I2</td><td>"Worker to order warranty?" — who orders the home warranty, when, which vendor, who pays?</td></tr>
+      <tr><td>I3</td><td>"Buyer TAR forms not listed" — which forms should be added to the catalog (RF141/RF142 buyer rep? others?)</td></tr>
+      <tr><td>I4</td><td>These notes read buyer-side. Biggest differences in your process when we're the <em>listing</em> side?</td></tr>
+    </table>
+    <a class="go" href="https://github.com/howard1081/tc-ops-blueprint/issues/9">Answer Topic I on GitHub →</a>
+  </div>
+
+  <div class="callout risk">
+    <strong>What happens with the answers:</strong> each becomes a rule candidate (condition → action → authority) added to this site in one reviewed pass — nothing gets built in n8n or Airtable until the resulting rulebook has survived a full read-through and approval.
+  </div>
+</main>
+<footer>TC Ops Blueprint · East Tennessee · Internal design document — not legal advice</footer>
+</body>
+</html>
