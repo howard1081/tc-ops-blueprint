@@ -1,0 +1,49 @@
+name: '📋 Review — Topic E: Title & closing'
+description: 'Rulebook v0.1 review: Title & closing (blank = approved)'
+title: 'Rulebook v0.1 review: Topic E — Title & closing'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_e1
+  attributes:
+    label: R-E1 (HUMAN)
+    description: No title-work chasing by workers — title communicates directly with the TC (too many variables)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_e2a
+  attributes:
+    label: R-E2a (AUTO)
+    description: 'Closing time: one email to the client with the agent CC''d; no response → one email to the agent asking what time to schedule'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_e2b
+  attributes:
+    label: R-E2b (AUTO)
+    description: Remote close → skip the closing-time ask; remind title it's a remote close needing a mobile notary
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_e3
+  attributes:
+    label: R-E3 (HUMAN)
+    description: 'Settlement review email: the system drafts it; a human pulls and attaches the TAR forms (too many logins for a worker) and sends'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_e4
+  attributes:
+    label: R-E4 (AUTO)
+    description: Final-inspection calendar invite only if the agent provides the time; if not (≈75% of the time), no follow-up
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

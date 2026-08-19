@@ -1,0 +1,25 @@
+name: '📋 Review — Topic G: Escalation & deadlines'
+description: 'Rulebook v0.1 review: Escalation & deadlines (blank = approved)'
+title: 'Rulebook v0.1 review: Topic G — Escalation & deadlines'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_g1
+  attributes:
+    label: R-G1 (AUTO)
+    description: Day-of deadline alert fires at 8:00 AM
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_g2
+  attributes:
+    label: R-G2 (HUMAN)
+    description: Contract deadline passes unanswered → escalate to the human TC (deal On Hold + urgent text)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

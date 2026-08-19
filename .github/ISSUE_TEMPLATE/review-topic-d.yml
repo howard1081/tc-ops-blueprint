@@ -1,0 +1,41 @@
+name: '📋 Review — Topic D: Client updates & utilities'
+description: 'Rulebook v0.1 review: Client updates & utilities (blank = approved)'
+title: 'Rulebook v0.1 review: Topic D — Client updates & utilities'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_d1
+  attributes:
+    label: R-D1 (OPEN)
+    description: Update email templates to be provided by the manager (Round 2)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_d2
+  attributes:
+    label: R-D2 (AUTO)
+    description: 'Utilities: always google the property address — never use a maintained county index (Knox County utility borders are unreliable)'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_d3a
+  attributes:
+    label: R-D3a (AUTO)
+    description: Our agent is CC'd on every correspondence the TC sends
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_d3b
+  attributes:
+    label: R-D3b (AUTO)
+    description: 'Fixed client update schedule — Week 1: progressing well (or lender-needs-info) + utilities · Week 2: appraisal ordered + title work back good · Week 3: appraisal good + closing-time preference · Final: closing info reminder'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

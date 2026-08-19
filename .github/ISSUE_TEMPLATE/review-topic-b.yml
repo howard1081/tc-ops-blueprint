@@ -1,0 +1,49 @@
+name: '📋 Review — Topic B: Earnest money'
+description: 'Rulebook v0.1 review: Earnest money (blank = approved)'
+title: 'Rulebook v0.1 review: Topic B — Earnest money'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_b1
+  attributes:
+    label: R-B1 (AUTO)
+    description: '"1 is good" — the blueprint''s earnest-money process is confirmed as-is, no changes'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_b2
+  attributes:
+    label: R-B2 (AUTO)
+    description: We hold the EM and the buyer has not submitted it by the due date → critical follow-up fires
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_b3a
+  attributes:
+    label: R-B3a (AUTO)
+    description: Buyer side → EM reminder to the buyer's agent the day before the due date
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_b3b
+  attributes:
+    label: R-B3b (AUTO)
+    description: Seller side → request proof of EM on the due date
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_b3c
+  attributes:
+    label: R-B3c (HUMAN)
+    description: Seller side, no proof after the due-date request → ask our agent whether to send the TAR notification form demanding performance (agent decides)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

@@ -1,0 +1,97 @@
+name: '📋 Review — Topic A: Intake & contract reading'
+description: 'Rulebook v0.1 review: Intake & contract reading (blank = approved)'
+title: 'Rulebook v0.1 review: Topic A — Intake & contract reading'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_a1
+  attributes:
+    label: R-A1 (AUTO)
+    description: Counter offer executed → override only the fields the counter mentions; all other terms stay from the base contract
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a2a
+  attributes:
+    label: R-A2a (AUTO)
+    description: Special stip = agent commission → log to SkySlope and spreadsheet
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a2b
+  attributes:
+    label: R-A2b (AUTO)
+    description: Special stip = contingency on buyer's home sale → log to spreadsheet + open home-sale tracking follow-up emails
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a2c
+  attributes:
+    label: R-A2c (HUMAN)
+    description: Special stip of any other type → log to spreadsheet and escalate for classification (no guessing)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a3a
+  attributes:
+    label: R-A3a (AUTO)
+    description: House has septic → expect septic file + septic disclosure in the MLS paperwork
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a3b
+  attributes:
+    label: R-A3b (AUTO)
+    description: Septic disclosure says "no file found" and we are buyer side → request proof from the listing agent
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a3c
+  attributes:
+    label: R-A3c (AUTO)
+    description: Septic disclosure says "permitted for N bedrooms" → request the septic file from the listing agent
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a3d
+  attributes:
+    label: R-A3d (HUMAN)
+    description: Listing agent fails to provide septic backup → human fills the Wallace Connect request form and emails the state for verification
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a4
+  attributes:
+    label: R-A4 (AUTO)
+    description: Built before 1978 → lead-based paint disclosure required (1976 in the notes was a typo)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a5a
+  attributes:
+    label: R-A5a (AUTO)
+    description: MLS vs contract conflict on negotiable terms (price, commission, etc.) → the contract wins
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_a5b
+  attributes:
+    label: R-A5b (HUMAN)
+    description: MLS vs contract mismatch on spelling or PIN number → escalate to a person for verification
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

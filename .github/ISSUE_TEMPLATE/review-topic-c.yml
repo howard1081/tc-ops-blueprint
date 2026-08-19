@@ -1,0 +1,57 @@
+name: '📋 Review — Topic C: Repairs & appraisal'
+description: 'Rulebook v0.1 review: Repairs & appraisal (blank = approved)'
+title: 'Rulebook v0.1 review: Topic C — Repairs & appraisal'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_c1
+  attributes:
+    label: R-C1 (HUMAN)
+    description: TC drafts the repair proposal exactly per the agent's instruction; the agent approves and sends; the agent does all negotiation; TC handles paperwork only — "TC is the machine, we have no brain"
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_c2
+  attributes:
+    label: R-C2 (AUTO)
+    description: Appraisal-ordered-within-14-days-of-binding is contract language; it varies only via special stip, waiver, or amendment
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_c3a
+  attributes:
+    label: R-C3a (AUTO)
+    description: Day 13 and no OK-to-order-appraisal received yet → reminder to our agent asking if clear to order
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_c3b
+  attributes:
+    label: R-C3b (AUTO)
+    description: Agent gives the OK → email the lender "clear to order the appraisal"
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_c4a
+  attributes:
+    label: R-C4a (AUTO)
+    description: A repair amendment never changes dates — date changes ride a closing-date amendment or regular amendment
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_c4b
+  attributes:
+    label: R-C4b (AUTO)
+    description: Closing-date / regular amendment executed → reset internal (non-contract) follow-up deadlines and the closing date; contract deadlines (e.g. 14-day appraisal) do not reset unless the amendment says so
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

@@ -1,0 +1,49 @@
+name: '📋 Review — Topic I: Workers, forms & seller side'
+description: 'Rulebook v0.1 review: Workers, forms & seller side (blank = approved)'
+title: 'Rulebook v0.1 review: Topic I — Workers, forms & seller side'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_i1
+  attributes:
+    label: R-I1 (AUTO)
+    description: 'Canva worker: templated social graphics — "Pending" on day 1; "Just Closed" day of / after closing'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_i2
+  attributes:
+    label: R-I2 (OPEN)
+    description: 'Home warranty: the contract states company, amount, and who orders; often requires a phone call → human touch point; exact flow TBD (Round 2)'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_i3a
+  attributes:
+    label: R-I3a (AUTO)
+    description: 'Buyer-side required TAR forms: Disclaimer notice · Wire fraud · Affiliated business disclosure · Buyer rep'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_i3b
+  attributes:
+    label: R-I3b (HUMAN)
+    description: 'Buyer rep amount ≠ contract amount → ask the agent: buyer rep amendment, or buyer pays the difference?'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_i4
+  attributes:
+    label: R-I4 (AUTO)
+    description: 'Seller side: listing documents are entered by the agent at listing creation — out of TC scope'
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false

@@ -1,0 +1,33 @@
+name: '📋 Review — Topic H: Contacts & Rolodex'
+description: 'Rulebook v0.1 review: Contacts & Rolodex (blank = approved)'
+title: 'Rulebook v0.1 review: Topic H — Contacts & Rolodex'
+labels:
+- rulebook-review
+body:
+- type: markdown
+  attributes:
+    value: Review each rule below. **Leave a box blank to approve that rule as written.** Type in a box only if the rule is wrong or needs a change — say what it should be instead. Press **Submit new issue** at the bottom when done.
+- type: textarea
+  id: r_h1
+  attributes:
+    label: R-H1 (HUMAN)
+    description: Lender/title contact missing from the file → human TC touch point (website lookup or a phone call to the title company)
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_h2a
+  attributes:
+    label: R-H2a (AUTO)
+    description: Contact exists in our rolodex → generic follow-up emails may auto-send
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
+- type: textarea
+  id: r_h2b
+  attributes:
+    label: R-H2b (HUMAN)
+    description: Welcome emails are never auto-sent
+    placeholder: Leave blank to approve — or type the correction here...
+  validations:
+    required: false
