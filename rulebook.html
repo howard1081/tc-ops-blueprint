@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rulebook v0.1 — TC Ops Blueprint</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="topbar">
+    <a class="brand" href="index.html">TC <span>Ops</span> Blueprint</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="questions.html">Question Round</a>
+      <a href="rulebook.html" class="active">Rulebook</a>
+      <a href="process.html">Process Model</a>
+      <a href="workers.html">Worker Architecture</a>
+      <a href="schema.html">Database Schema</a>
+      <a href="tn-briefing.html">TN / TAR Rules</a>
+      <a href="tc-briefing.html">TC Industry Briefing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page">Rulebook v0.1 — DRAFT for approval</h1>
+  <p class="sub">Built entirely from the TC Manager's Question Round 1 answers (GitHub issues #10–#18, answered 2026-08-19). Each rule is condition → action, with a gate: <span class="pill machine">AUTO</span> = the Manager worker may act on an exact match; <span class="pill human">HUMAN</span> = staged for a person to handle or approve. The bracket after each rule is the answer it came from — click any topic heading to see the original answer thread. Nothing gets built until this page is approved.</p>
+
+  <h2>How to read this page</h2>
+  <div class="card">
+    <p>Every answer the manager gave was converted into one or more written rules. The Manager worker will only ever act on an <strong>exact match</strong> to an AUTO rule — anything that doesn't match a rule exactly escalates to a person. If a rule below is wrong, say so now (a comment on the topic's GitHub thread is perfect); once approved, this becomes <strong>Rulebook v1.0</strong> and is what the system runs on.</p>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/10">Intake &amp; contract reading</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-A1</td><td><span class="pill machine">AUTO</span></td><td>Counter offer executed → override <strong>only the fields the counter mentions</strong>; all other terms stay from the base contract</td><td>A1</td></tr>
+      <tr><td>R-A2a</td><td><span class="pill machine">AUTO</span></td><td>Special stip = agent commission → log to SkySlope <strong>and</strong> spreadsheet</td><td>A2</td></tr>
+      <tr><td>R-A2b</td><td><span class="pill machine">AUTO</span></td><td>Special stip = contingency on buyer's home sale → log to spreadsheet + open home-sale tracking follow-up emails</td><td>A2</td></tr>
+      <tr><td>R-A2c</td><td><span class="pill human">HUMAN</span></td><td>Special stip of any other type → log to spreadsheet and escalate for classification (no guessing)</td><td>A2</td></tr>
+      <tr><td>R-A3a</td><td><span class="pill machine">AUTO</span></td><td>House has septic → expect septic file + septic disclosure in the MLS paperwork</td><td>A3</td></tr>
+      <tr><td>R-A3b</td><td><span class="pill machine">AUTO</span></td><td>Septic disclosure says "no file found" and we are buyer side → request proof from the listing agent</td><td>A3</td></tr>
+      <tr><td>R-A3c</td><td><span class="pill machine">AUTO</span></td><td>Septic disclosure says "permitted for N bedrooms" → request the septic file from the listing agent</td><td>A3</td></tr>
+      <tr><td>R-A3d</td><td><span class="pill human">HUMAN</span></td><td>Listing agent fails to provide septic backup → human fills the Wallace Connect request form and emails the state for verification</td><td>A3</td></tr>
+      <tr><td>R-A4</td><td><span class="pill machine">AUTO</span></td><td>Built before <strong>1978</strong> → lead-based paint disclosure required (1976 in the notes was a typo)</td><td>A4</td></tr>
+      <tr><td>R-A5a</td><td><span class="pill machine">AUTO</span></td><td>MLS vs contract conflict on negotiable terms (price, commission, etc.) → the contract wins</td><td>A5</td></tr>
+      <tr><td>R-A5b</td><td><span class="pill human">HUMAN</span></td><td>MLS vs contract mismatch on spelling or PIN number → escalate to a person for verification</td><td>A5</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/11">Earnest money</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-B1</td><td><span class="pill machine">AUTO</span></td><td>"1 is good" — the blueprint's earnest-money process is confirmed as-is, no changes</td><td>B1</td></tr>
+      <tr><td>R-B2</td><td><span class="pill machine">AUTO</span></td><td>We hold the EM and the buyer has not submitted it by the due date → critical follow-up fires</td><td>B2</td></tr>
+      <tr><td>R-B3a</td><td><span class="pill machine">AUTO</span></td><td>Buyer side → EM reminder to the buyer's agent the day <strong>before</strong> the due date</td><td>B3</td></tr>
+      <tr><td>R-B3b</td><td><span class="pill machine">AUTO</span></td><td>Seller side → request proof of EM <strong>on</strong> the due date</td><td>B3</td></tr>
+      <tr><td>R-B3c</td><td><span class="pill human">HUMAN</span></td><td>Seller side, no proof after the due-date request → ask our agent whether to send the TAR notification form demanding performance (agent decides)</td><td>B3</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/12">Repairs &amp; appraisal</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-C1</td><td><span class="pill human">HUMAN</span></td><td>TC drafts the repair proposal exactly per the agent's instruction; the <strong>agent</strong> approves and sends; the agent does all negotiation; TC handles paperwork only — "TC is the machine, we have no brain"</td><td>C1</td></tr>
+      <tr><td>R-C2</td><td><span class="pill machine">AUTO</span></td><td>Appraisal-ordered-within-14-days-of-binding is contract language; it varies only via special stip, waiver, or amendment</td><td>C2</td></tr>
+      <tr><td>R-C3a</td><td><span class="pill machine">AUTO</span></td><td>Day 13 and no OK-to-order-appraisal received yet → reminder to <strong>our agent</strong> asking if clear to order</td><td>C3</td></tr>
+      <tr><td>R-C3b</td><td><span class="pill machine">AUTO</span></td><td>Agent gives the OK → email the lender "clear to order the appraisal"</td><td>C3</td></tr>
+      <tr><td>R-C4a</td><td><span class="pill machine">AUTO</span></td><td>A repair amendment <strong>never</strong> changes dates — date changes ride a closing-date amendment or regular amendment</td><td>C4</td></tr>
+      <tr><td>R-C4b</td><td><span class="pill machine">AUTO</span></td><td>Closing-date / regular amendment executed → reset internal (non-contract) follow-up deadlines and the closing date; contract deadlines (e.g. 14-day appraisal) do <strong>not</strong> reset unless the amendment says so</td><td>C4</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/13">Client updates &amp; utilities</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-D1</td><td><span class="status draft">OPEN</span></td><td>Update email templates to be provided by the manager (Round 2)</td><td>D1</td></tr>
+      <tr><td>R-D2</td><td><span class="pill machine">AUTO</span></td><td>Utilities: <strong>always google the property address</strong> — never use a maintained county index (Knox County utility borders are unreliable)</td><td>D2</td></tr>
+      <tr><td>R-D3a</td><td><span class="pill machine">AUTO</span></td><td>Our agent is CC'd on <strong>every</strong> correspondence the TC sends</td><td>D3</td></tr>
+      <tr><td>R-D3b</td><td><span class="pill machine">AUTO</span></td><td>Fixed client update schedule — Week 1: progressing well (or lender-needs-info) + utilities · Week 2: appraisal ordered + title work back good · Week 3: appraisal good + closing-time preference · Final: closing info reminder</td><td>D3</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/14">Title &amp; closing</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-E1</td><td><span class="pill human">HUMAN</span></td><td>No title-work chasing by workers — title communicates directly with the TC (too many variables)</td><td>E1</td></tr>
+      <tr><td>R-E2a</td><td><span class="pill machine">AUTO</span></td><td>Closing time: one email to the client with the agent CC'd; no response → one email to the agent asking what time to schedule</td><td>E2</td></tr>
+      <tr><td>R-E2b</td><td><span class="pill machine">AUTO</span></td><td>Remote close → skip the closing-time ask; remind title it's a remote close needing a mobile notary</td><td>E2</td></tr>
+      <tr><td>R-E3</td><td><span class="pill human">HUMAN</span></td><td>Settlement review email: the system drafts it; a <strong>human</strong> pulls and attaches the TAR forms (too many logins for a worker) and sends</td><td>E3</td></tr>
+      <tr><td>R-E4</td><td><span class="pill machine">AUTO</span></td><td>Final-inspection calendar invite only if the agent provides the time; if not (≈75% of the time), no follow-up</td><td>E4</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/15">Wire policy</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-F1</td><td><span class="pill human">HUMAN — PERMANENT</span></td><td>Never store, forward, or confirm wiring instructions. Never auto-respond to a wiring question — a human replies, and the content is: <em>"the title company will provide this"</em></td><td>F1</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/16">Escalation &amp; deadlines</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-G1</td><td><span class="pill machine">AUTO</span></td><td>Day-of deadline alert fires at <strong>8:00 AM</strong></td><td>G1</td></tr>
+      <tr><td>R-G2</td><td><span class="pill human">HUMAN</span></td><td>Contract deadline passes unanswered → escalate to the human TC (deal On Hold + urgent text)</td><td>G2</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/17">Contacts &amp; Rolodex</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-H1</td><td><span class="pill human">HUMAN</span></td><td>Lender/title contact missing from the file → human TC touch point (website lookup or a phone call to the title company)</td><td>H1</td></tr>
+      <tr><td>R-H2a</td><td><span class="pill machine">AUTO</span></td><td>Contact exists in our rolodex → generic follow-up emails may auto-send</td><td>H2</td></tr>
+      <tr><td>R-H2b</td><td><span class="pill human">HUMAN</span></td><td>Welcome emails are <strong>never</strong> auto-sent</td><td>H2</td></tr>
+    </table>
+  </div>
+
+  <h2><a href="https://github.com/howard1081/tc-ops-blueprint/issues/18">Workers, forms &amp; seller side</a></h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Gate</th><th>Condition → Action</th><th>Source</th></tr>
+      <tr><td>R-I1</td><td><span class="pill machine">AUTO</span></td><td>Canva worker: templated social graphics — "Pending" on day 1; "Just Closed" day of / after closing</td><td>I1</td></tr>
+      <tr><td>R-I2</td><td><span class="status draft">OPEN</span></td><td>Home warranty: the contract states company, amount, and who orders; often requires a phone call → human touch point; exact flow TBD (Round 2)</td><td>I2</td></tr>
+      <tr><td>R-I3a</td><td><span class="pill machine">AUTO</span></td><td>Buyer-side required TAR forms: Disclaimer notice · Wire fraud · Affiliated business disclosure · Buyer rep</td><td>I3</td></tr>
+      <tr><td>R-I3b</td><td><span class="pill human">HUMAN</span></td><td>Buyer rep amount ≠ contract amount → ask the agent: buyer rep amendment, or buyer pays the difference?</td><td>I3</td></tr>
+      <tr><td>R-I4</td><td><span class="pill machine">AUTO</span></td><td>Seller side: listing documents are entered by the agent at listing creation — out of TC scope</td><td>I4</td></tr>
+    </table>
+  </div>
+
+  <h2>Open items for Round 2</h2>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Item</th><th>From</th></tr>
+      <tr><td>1</td><td>Update email templates (Week 1 / 2 / 3 / final) — manager to provide</td><td>D1</td></tr>
+      <tr><td>2</td><td>Home warranty ordering flow — walk through a real example</td><td>I2</td></tr>
+      <tr><td>3</td><td>Wallace Connect septic request form — get a copy/location so it can be pre-filled for the human</td><td>A3</td></tr>
+      <tr><td>4</td><td>Define the "welcome emails" list — which emails are always human-sent</td><td>H2</td></tr>
+      <tr><td>5</td><td>Canva "Pending" / "Just Closed" template files</td><td>I1</td></tr>
+    </table>
+  </div>
+</main>
+
+<footer class="site">
+  <p>TC Ops Blueprint — design document, not legal advice. Rulebook v0.1 draft from Question Round 1.</p>
+</footer>
+</body>
+</html>
